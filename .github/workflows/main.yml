@@ -1,2 +1,16 @@
-              - name: Deploy Flutter web app to github pages (removing large assets/NOTICES file)
-                uses: AlienKevin/flutter-gh-pages@v11
+name: Gh-Pages
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2 # Only works with v2
+      - uses: subosito/flutter-action@v1
+      - uses: bluefireteam/flutter-gh-pages@v7
+        with:
+          baseHref: /closedloop/
