@@ -39,9 +39,20 @@
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
 </head>
-<body>
+<style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+</style>
+<body style="height:100vh;display: flex;
+align-items: center;
+background-color: rgba(0, 0, 0, 0.815);font-size:5em;justify-content:center;color:white;animation: fadeIn 1s forwards;">
+  <div id="loading">&infin;</div>
   <script>
     window.addEventListener('load', function(ev) {
+      var loading = document.querySelector('#loading');
       // Download main.dart.js
       _flutter.loader.loadEntrypoint({
         serviceWorker: {
