@@ -36,7 +36,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
   card_swiper : ^3.0.0
-  google_fonts : ^6.2.1
   animated_notch_bottom_bar: ^1.0.0
 dev_dependencies:
   flutter_test:
@@ -61,6 +60,22 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: fonts/Inter-Black.ttf
+        - asset: fonts/Inter-Bold.ttf
+        - asset: fonts/Inter-ExtraBold.ttf
+        - asset: fonts/Inter-ExtraLight.ttf
+        - asset: fonts/Inter-Light.ttf
+        - asset: fonts/Inter-Medium.ttf
+        - asset: fonts/Inter-Regular.ttf
+        - asset: fonts/Inter-SemiBold.ttf
+        - asset: fonts/Inter-Thin.ttf
+    - family: NunitoSans
+      fonts:
+        - asset: fonts/NunitoSans-Variable.ttf
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

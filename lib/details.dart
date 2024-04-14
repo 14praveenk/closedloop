@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'sourceinfo.dart';
 
 class DetailsPage extends StatelessWidget {

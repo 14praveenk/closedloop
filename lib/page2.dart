@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'dart:math';
 import 'sourceinfo.dart';
 import 'details.dart';
@@ -24,7 +23,9 @@ class Page2 extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Closed Loop',
-            style: GoogleFonts.nunitoSans(textStyle: TextStyle())),
+            style: TextStyle(
+                fontVariations: [FontVariation('wght', (400))],
+                fontFamily: "NunitoSans")),
         leading: Icon(Icons.all_inclusive),
       ),
       body: OrientationBuilder(
@@ -49,19 +50,20 @@ class Page2 extends StatelessWidget {
                         child: TextField(
                           maxLines: 1,
                           textAlignVertical: TextAlignVertical.center,
-                          style: (GoogleFonts.inter(
-                              textStyle: TextStyle(
-                                  fontSize: 20,
-                                  letterSpacing: 0.1,
-                                  color: Color.fromRGBO(0, 0, 0, 0.44)))),
+                          style: TextStyle(
+                              fontFamily: "Inter",
+                              fontSize: 20,
+                              letterSpacing: 0.1,
+                              color: Color.fromRGBO(0, 0, 0, 0.44)),
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.zero,
                             hintText: 'Search',
-                            hintStyle: GoogleFonts.inter(
-                                textStyle: TextStyle(
-                                    fontSize: 20,
-                                    letterSpacing: 0.1,
-                                    color: Color.fromRGBO(0, 0, 0, 0.44))),
+                            hintStyle: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontFamily: "Inter",
+                                fontSize: 20,
+                                letterSpacing: 0.1,
+                                color: Color.fromRGBO(0, 0, 0, 0.44)),
                             prefixIcon: Icon(Icons.search),
                             fillColor: Color.fromARGB(255, 243, 243, 243),
                             filled: true,
@@ -89,15 +91,20 @@ class Page2 extends StatelessWidget {
                                   alignment: Alignment.centerLeft,
                                   child: Text(
                                       'What is closed loop communication?',
-                                      style: GoogleFonts.nunitoSans(
-                                          textStyle: TextStyle(fontSize: 20))),
+                                      style: TextStyle(
+                                          fontVariations: [
+                                            FontVariation('wght', (400))
+                                          ],
+                                          fontSize: 20,
+                                          fontFamily: "NunitoSans")),
                                 ),
                                 Spacer(),
                                 Align(
                                   alignment: Alignment.bottomRight,
                                   child: TextButton(
                                     style: ButtonStyle(
-                                      fixedSize: MaterialStateProperty.all(Size.fromWidth(150)),
+                                        fixedSize: MaterialStateProperty.all(
+                                            Size.fromWidth(150)),
                                         padding: MaterialStateProperty.all<
                                                 EdgeInsets>(
                                             EdgeInsets.fromLTRB(
@@ -107,9 +114,12 @@ class Page2 extends StatelessWidget {
                                             MainAxisAlignment.end,
                                         children: [
                                           Text('Learn more',
-                                              style: GoogleFonts.nunitoSans(
-                                                  textStyle:
-                                                      TextStyle(fontSize: 20))),
+                                              style: TextStyle(
+                                                  fontVariations: [
+                                                    FontVariation('wght', (400))
+                                                  ],
+                                                  fontFamily: "NunitoSans",
+                                                  fontSize: 20)),
                                           Icon(Icons.arrow_forward_ios)
                                         ]),
                                     onPressed: () {
@@ -138,8 +148,10 @@ class Page2 extends StatelessWidget {
                           padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
                           child: Text(
                             'Practice today',
-                            style: GoogleFonts.nunitoSans(
-                                textStyle: TextStyle(fontSize: 30)),
+                            style: TextStyle(
+                              fontSize:30,
+                fontVariations: [FontVariation('wght', (400))],
+                fontFamily: "NunitoSans"),
                           ),
                         ),
                       ],
@@ -167,9 +179,11 @@ class Page2 extends StatelessWidget {
                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)),
-                                textStyle: GoogleFonts.nunitoSans(
-                                    textStyle: TextStyle(
-                                        fontSize: 16, color: Colors.black)),
+                                textStyle: TextStyle(
+                                  fontSize:16,
+                                  color:Colors.black,
+                fontVariations: [FontVariation('wght', (400))],
+                fontFamily: "NunitoSans"),
                               ),
                               onPressed: () {
                                 Navigator.push(
@@ -195,11 +209,11 @@ class Page2 extends StatelessWidget {
                                           EdgeInsets.fromLTRB(0, 20, 0, 0)),
                                   Text(planetInfo[index].name,
                                       textAlign: TextAlign.center,
-                                      style: GoogleFonts.nunitoSans(
-                                          textStyle: TextStyle(
-                                              fontSize: 16,
-                                              color:
-                                                  Color.fromRGBO(0, 0, 0, 1)))),
+                                      style: TextStyle(
+                fontVariations: [FontVariation('wght', (400))],
+                fontFamily: "NunitoSans",
+                fontSize:16,
+                color: Colors.black,)),
                                 ],
                               ),
                             );

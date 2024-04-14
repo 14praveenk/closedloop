@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'dart:math';
 import 'sourceinfo.dart';
 import 'details.dart';
@@ -22,7 +21,9 @@ class Page3 extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Learn',
-          style: GoogleFonts.nunitoSans(textStyle: TextStyle()),
+          style: TextStyle(
+                fontVariations: [FontVariation('wght', (400))],
+                fontFamily: "NunitoSans"),
         ),
         leading: Icon(Icons.all_inclusive),
         actions: [
@@ -33,27 +34,37 @@ class Page3 extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                decoration: InputDecoration(
-                  labelText: 'Search',
-                  labelStyle: GoogleFonts.inter(
-                      textStyle: TextStyle(
-                          fontSize: 20,
-                          letterSpacing: 0.1,
-                          color: Color.fromRGBO(0, 0, 0, 0.44))),
-                  prefixIcon: Icon(Icons.search),
-                  fillColor: Color.fromARGB(255, 243, 243, 243),
-                  filled: true,
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        color: Color.fromARGB(255, 243, 243, 243),
-                      )),
-                ),
-              ),
-            ),
+                    Container(
+                      height: 100,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: TextField(
+                          maxLines: 1,
+                          textAlignVertical: TextAlignVertical.center,
+                          style: TextStyle(
+                              fontFamily: "Inter",
+                              fontSize: 20,
+                              letterSpacing: 0.1,
+                              color: Color.fromRGBO(0, 0, 0, 0.44)),
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.zero,
+                            hintText: 'Search',
+                            hintStyle: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontFamily: "Inter",
+                                fontSize: 20,
+                                letterSpacing: 0.1,
+                                color: Color.fromRGBO(0, 0, 0, 0.44)),
+                            prefixIcon: Icon(Icons.search),
+                            fillColor: Color.fromARGB(255, 243, 243, 243),
+                            filled: true,
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide.none),
+                          ),
+                        ),
+                      ),
+                    ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -61,9 +72,12 @@ class Page3 extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(16, 10, 0, 0),
                   child: Text(
                     'Most popular',
-                    style: GoogleFonts.nunitoSans(
-                        textStyle: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.w300)),
+                    style: TextStyle(
+                                                  fontVariations: [
+                                                    FontVariation('wght', (300))
+                                                  ],
+                                                  fontFamily: "NunitoSans",
+                                                  fontSize: 30),
                   ),
                 ),
               ],
@@ -119,24 +133,28 @@ class Page3 extends StatelessWidget {
                                             MainAxisAlignment.start,
                                         children: [
                                           Flexible(child:Text('Cardiac Arrest',textScaler: TextScaler.linear(2*ScaleSize.textScaleFactor(context)),
-                                              style: GoogleFonts.nunitoSans(
-                                                textStyle: const TextStyle(
-                                                    height: 1.4,
-                                                    
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Colors.white),
-                                              )),),
+                                              style: TextStyle(
+                                                  fontVariations: [
+                                                    FontVariation('wght', (600))
+                                                  ],
+                                                  color:Colors.white,
+                                                  fontFamily: "NunitoSans",
+                                                  fontSize: 15)
+                                              
+                                              ),),
                                         ]),
                                     Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                         mainAxisAlignment: MainAxisAlignment.start,children:[Text(
                                       '3 videos',textScaler: TextScaler.linear(ScaleSize.textScaleFactor(context)),
-                                      style: GoogleFonts.nunitoSans(
-                                          textStyle: TextStyle(
-                                              
-                                              fontWeight: FontWeight.w300,
-                                              color: Colors.white)),
+                                      style: TextStyle(
+                                                  fontVariations: [
+                                                    FontVariation('wght', (300))
+                                                  ],
+                                                  color:Colors.white,
+                                                  fontFamily: "NunitoSans",
+                                                  fontSize: 15),
                                     )]),
                                   ])),
                               Spacer(),
@@ -152,12 +170,13 @@ class Page3 extends StatelessWidget {
                                             padding:
                                                 EdgeInsets.fromLTRB(0, 0, 5, 0),
                                             child: Text("Not started",textScaler: TextScaler.linear(ScaleSize.textScaleFactor(context)),
-                                                style: GoogleFonts.nunitoSans(
-                                                    textStyle: TextStyle(
-                                                        
-                                                        fontWeight:
-                                                            FontWeight.w300,
-                                                        color: Colors.white)))),
+                                                style: TextStyle(
+                                                  fontVariations: [
+                                                    FontVariation('wght', (300))
+                                                  ],
+                                                  color:Colors.white,
+                                                  fontFamily: "NunitoSans",
+                                                  fontSize: 15))),
                                         Icon(Icons.play_circle_outline,
                                             size: 20, color: Colors.white)
                                       ]))
@@ -210,23 +229,27 @@ class Page3 extends StatelessWidget {
                                             MainAxisAlignment.start,
                                         children: [
                                           Flexible(child:Text('Surgical Procedures',textScaler: TextScaler.linear(2*ScaleSize.textScaleFactor(context)),
-                                              style: GoogleFonts.nunitoSans(
-                                                textStyle: const TextStyle(
-                                                    height: 1.4,
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Colors.white),
-                                              )),)
+                                              style: TextStyle(
+                                                  fontVariations: [
+                                                    FontVariation('wght', (600))
+                                                  ],
+                                                  color:Colors.white,
+                                                  fontFamily: "NunitoSans",
+                                                  fontSize: 15),
+                                              ),)
                                         ]),
                                     Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                         mainAxisAlignment: MainAxisAlignment.start,children:[Text(
                                       '3 videos',textScaler: TextScaler.linear(ScaleSize.textScaleFactor(context)),
-                                      style: GoogleFonts.nunitoSans(
-                                          textStyle: TextStyle(
-                                              
-                                              fontWeight: FontWeight.w300,
-                                              color: Colors.white)),
+                                      style: TextStyle(
+                                                  fontVariations: [
+                                                    FontVariation('wght', (300))
+                                                  ],
+                                                  color:Colors.white,
+                                                  fontFamily: "NunitoSans",
+                                                  fontSize: 15),
                                     )]),
                                       ])),
                               Spacer(),
@@ -242,12 +265,13 @@ class Page3 extends StatelessWidget {
                                             padding:
                                                 EdgeInsets.fromLTRB(0, 0, 5, 0),
                                             child: Text("2 left",textScaler: TextScaler.linear(ScaleSize.textScaleFactor(context)),
-                                                style: GoogleFonts.nunitoSans(
-                                                    textStyle: TextStyle(
-                                                        
-                                                        fontWeight:
-                                                            FontWeight.w300,
-                                                        color: Colors.white)))),
+                                                style: TextStyle(
+                                                  fontVariations: [
+                                                    FontVariation('wght', (300))
+                                                  ],
+                                                  color:Colors.white,
+                                                  fontFamily: "NunitoSans",
+                                                  fontSize: 15))),
                                         Icon(Icons.play_circle_outline,
                                             size: 20, color: Colors.white)
                                       ]))
@@ -270,9 +294,13 @@ class Page3 extends StatelessWidget {
                   padding: const EdgeInsets.fromLTRB(16, 30, 0, 10),
                   child: Text(
                     'Completed',
-                    style: GoogleFonts.nunitoSans(
-                        textStyle: TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.w300)),
+                    style: TextStyle(
+                                                  fontVariations: [
+                                                    FontVariation('wght', (300))
+                                                  ],
+                                                  color:Colors.white,
+                                                  fontFamily: "NunitoSans",
+                                                  fontSize: 30),
                   ),
                 ),
               ],
@@ -290,10 +318,13 @@ class Page3 extends StatelessWidget {
                                 Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text("Fundamentals",
-                                        style: GoogleFonts.nunitoSans(
-                                            textStyle: TextStyle(
-                                          fontSize: 25,
-                                        )))),
+                                        style: TextStyle(
+                                                  fontVariations: [
+                                                    FontVariation('wght', (400))
+                                                  ],
+                                                  color:Colors.black,
+                                                  fontFamily: "NunitoSans",
+                                                  fontSize: 25))),
                                 Spacer(),
                                 Align(
                                     alignment: Alignment.centerRight,
@@ -313,10 +344,13 @@ class Page3 extends StatelessWidget {
                                 Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text("Key Terms",
-                                        style: GoogleFonts.nunitoSans(
-                                            textStyle: TextStyle(
-                                          fontSize: 25,
-                                        )))),
+                                        style: TextStyle(
+                                                  fontVariations: [
+                                                    FontVariation('wght', (400))
+                                                  ],
+                                                  color:Colors.black,
+                                                  fontFamily: "NunitoSans",
+                                                  fontSize: 25))),
                                 Spacer(),
                                 Align(
                                     alignment: Alignment.centerRight,
