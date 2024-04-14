@@ -321,15 +321,15 @@ void _notifyDownloadComplete(BuildContext context) {
     final rawResult = await store.getObject(videoId);
     db.close();
 
-    if (rawResult != null) {
-      final result = rawResult as Map<String, dynamic>;
-      final Uint8List data = result['data'];
-      final blob = Blob([data]);
-      final url = Url.createObjectUrlFromBlob(blob);
-      return url;  // Local blob URL for playback
-    } else {
-      return videoUrl;  // Fallback to the original network URL
-    }
+if (rawResult != null) {
+  final result = rawResult as Map<String, dynamic>;
+  final Uint8List data = result['data'] as Uint8List;
+  final blob = Blob([data], 'video/mp4');
+  final url = Url.createObjectUrl(blob);
+  return url;  // Local blob URL for playback
+} else {
+  return videoUrl;  // Fallback to the original network URL
+}
   }
 
   @override
