@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'page1.dart';
-import 'page2.dart';
-import 'page3.dart';
+import 'page2NEW.dart';
+import 'page3NEW.dart';
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
+import 'package:cuberto_bottom_bar/cuberto_bottom_bar.dart';
 
 void main() => runApp(MyApp());
 
@@ -21,9 +22,11 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  final _pageController = PageController(initialPage: 1);
-  final _controller = NotchBottomBarController(index: 1);
-  final List<Widget> pages = [Page1(), Page2(), Page3()];
+  int _currentPage = 0; // To track the active page
+
+  final _pageController = PageController(initialPage: 0);
+  final _controller = NotchBottomBarController(index: 0);
+  final List<Widget> pages = [Page2NEW(), Page3NEW()];
 
   @override
   void dispose() {
@@ -35,6 +38,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     bool isLargeScreen = MediaQuery.of(context).size.width > 600;
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 56, 56, 56),
       body: Row(
         children: [
           if (isLargeScreen) buildNavigationRail(),
@@ -52,43 +56,39 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget buildBottomBar() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        AnimatedNotchBottomBar(
-          notchBottomBarController: _controller,
-          kBottomRadius: 28.0,
-          
-          showLabel: false,
-          bottomBarItems: const [
-            BottomBarItem(
-              inActiveItem: Icon(Icons.construction_rounded, color: Colors.blueGrey),
-              activeItem: Icon(Icons.construction_rounded, color: Colors.blueAccent),
-              itemLabel: 'Page 1',
-            ),
-            BottomBarItem(
-              inActiveItem: Icon(Icons.home_rounded, color: Colors.blueGrey),
-              activeItem: Icon(Icons.home_rounded, color: Colors.blueAccent),
-              itemLabel: 'Home',
-            ),
-            BottomBarItem(
-              inActiveItem: Icon(Icons.school_rounded, color: Colors.blueGrey),
-              activeItem: Icon(Icons.school_rounded, color: Colors.blueAccent),
-              itemLabel: 'Learn',
-            ),
-          ],
-          onTap: (index) {
-            _pageController.jumpToPage(index);
-          },
-          kIconSize: 24.0,
+    return CubertoBottomBar(
+      barBackgroundColor: Color.fromARGB(255, 56, 56, 56),
+      selectedTab: _currentPage,
+      tabStyle: CubertoTabStyle.styleFadedBackground,
+      inactiveIconColor: Colors.white,
+      tabs: [
+        TabData(
+          iconData: Icons.video_call_outlined,
+          title: 'Watch',
+          tabColor: Color.fromARGB(255, 217, 221, 4),
+        ),
+        TabData(
+          iconData: Icons.school_outlined,
+          title: 'Learn',
+          tabColor: Color.fromARGB(255, 217, 221, 4),
         ),
       ],
-    );
-  }
+      onTabChangedListener: (position, title, color) {
+          setState(() {
+            _currentPage = position;
+            _pageController.jumpToPage(position);
+
+      });
+  });
+}
+
 
   NavigationRail buildNavigationRail() {
     return NavigationRail(
+      backgroundColor: Color.fromARGB(255, 56, 56, 56),
       selectedIndex: _controller.index,
+      useIndicator: true,
+      indicatorColor: Color.fromARGB(29, 171, 199, 46),
       onDestinationSelected: (index) {
         setState(() {
           _controller.index = index;
@@ -98,19 +98,14 @@ class _MainPageState extends State<MainPage> {
       labelType: NavigationRailLabelType.all,
       destinations: [
         NavigationRailDestination(
-          icon: Icon(Icons.construction_rounded),
-          selectedIcon: Icon(Icons.construction_rounded, color: Colors.blueAccent),
-          label: Text('tba'),
+          icon: Icon(Icons.video_call_outlined, color: Colors.white),
+          selectedIcon: Icon(Icons.video_call_outlined, color: Color.fromARGB(255, 217, 221, 4)),
+          label: Text('Watch',style: TextStyle(color:Colors.white),),
         ),
         NavigationRailDestination(
-          icon: Icon(Icons.home_rounded),
-          selectedIcon: Icon(Icons.home_rounded, color: Colors.blueAccent),
-          label: Text('Home'),
-        ),
-        NavigationRailDestination(
-          icon: Icon(Icons.school_rounded),
-          selectedIcon: Icon(Icons.school_rounded, color: Colors.blueAccent),
-          label: Text('Learn'),
+          icon: Icon(Icons.school_outlined, color: Colors.white),
+          selectedIcon: Icon(Icons.school_outlined, color: Color.fromARGB(255, 217, 221, 4)),
+          label: Text('Learn',style: TextStyle(color:Colors.white)),
         ),
       ],
     );

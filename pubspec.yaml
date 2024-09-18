@@ -44,6 +44,7 @@ dependencies:
   chewie: ^1.8.1
   universal_html: ^2.2.4
   idb_shim: ^2.4.1+1
+  cuberto_bottom_bar: ^3.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
