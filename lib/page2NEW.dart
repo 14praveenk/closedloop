@@ -295,7 +295,7 @@ Future<void> downloadAllVideos() async {
             borderRadius: const BorderRadius.all(Radius.circular(15)),
             child: Stack(
               children: <Widget>[
-                Image.network(
+                Image.asset(
                   video['thumbnail']!,
                   height: double.infinity,
                   width: double.infinity,
