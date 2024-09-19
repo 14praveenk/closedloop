@@ -230,7 +230,10 @@ Future<void> downloadAllVideos() async {
                   if (!videosDownloaded) ...[
                     const Text(
                       'Videos not yet available offline.',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+                      style: TextStyle(color: Colors.white, fontVariations: [
+                                                    FontVariation('wght', (400))
+                                                  ],
+                                                  fontFamily: "NunitoSans", fontSize: 16),
                     ),
                     const SizedBox(height: 10),
                     ElevatedButton(
@@ -238,7 +241,10 @@ Future<void> downloadAllVideos() async {
                       child: const Text('Download All Videos'),
                     ),
                   ] else ...[
-                    const Row(mainAxisAlignment:MainAxisAlignment.center,children:[Text('All videos available offline  ', style:(TextStyle(color: Colors.white, fontFamily: "Inter"))),Icon(Icons.cloud_download_outlined, color:Colors.white)])
+                    const Row(mainAxisAlignment:MainAxisAlignment.center,children:[Text('All videos available offline  ', style:(TextStyle(color: Colors.white, fontVariations: [
+                                                    FontVariation('wght', (400))
+                                                  ],
+                                                  fontFamily: "NunitoSans", ))),Icon(Icons.cloud_download_outlined, color:Colors.white)])
                   ],
                   const SizedBox(height: 20),
                   // Responsive Grid Layout for Videos
@@ -320,12 +326,13 @@ Future<void> downloadAllVideos() async {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
+                  textAlign: TextAlign.center,
                   video['title']!,
                   style: const TextStyle(
                     fontFamily: "Inter",
                     color: Colors.white,
                     fontSize: 25,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 const SizedBox(height: 10),
