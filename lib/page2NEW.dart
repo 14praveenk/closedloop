@@ -221,7 +221,7 @@ appBar: AppBar(
                 context: context,
                 builder: (BuildContext context) {
                   return Dialog(
-                    backgroundColor: Color.fromARGB(100, 0, 0, 0),
+                    backgroundColor: Color.fromARGB(255, 0, 0, 0),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
                     ),
