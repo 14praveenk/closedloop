@@ -35,6 +35,7 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
+  flutter_native_splash: ^2.4.0
   card_swiper : ^3.0.0
   animated_notch_bottom_bar: ^1.0.0
   video_player: ^2.2.14
@@ -72,14 +73,33 @@ flutter:
     - family: Inter
       fonts:
         - asset: fonts/Inter-Black.ttf
+          weight: 900
         - asset: fonts/Inter-Bold.ttf
+          weight: 700
         - asset: fonts/Inter-ExtraBold.ttf
+          weight: 800
         - asset: fonts/Inter-ExtraLight.ttf
+          weight: 200
         - asset: fonts/Inter-Light.ttf
+          weight: 300
         - asset: fonts/Inter-Medium.ttf
+          weight: 500
         - asset: fonts/Inter-Regular.ttf
+          weight: 400
         - asset: fonts/Inter-SemiBold.ttf
+          weight: 600
         - asset: fonts/Inter-Thin.ttf
+    - family: Amaranth
+      fonts:
+        - asset: fonts/Amaranth-Bold.ttf
+          weight: 700
+        - asset: fonts/Amaranth-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: fonts/Amaranth-Italic.ttf
+          style: italic
+        - asset: fonts/Amaranth-Regular.ttf
+          weight: 400
     - family: NunitoSans
       fonts:
         - asset: fonts/NunitoSans-Variable.ttf

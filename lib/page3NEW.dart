@@ -20,7 +20,7 @@ class Page3NEW extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 56, 56, 56),
         title: Text(
-          'Learn Closed-Loop',
+          'Learning',
           style: TextStyle(
             color: Colors.white,
                 fontVariations: [FontVariation('wght', (400))],

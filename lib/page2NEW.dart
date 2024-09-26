@@ -9,7 +9,8 @@ import 'package:idb_shim/idb_browser.dart';
 import 'package:idb_shim/idb.dart';
 
 class ScaleSize {
-  static double textScaleFactor(BuildContext context, {double maxTextScaleFactor = 2}) {
+  static double textScaleFactor(BuildContext context,
+      {double maxTextScaleFactor = 2}) {
     final width = MediaQuery.of(context).size.width;
     double val = (width / 1400) * maxTextScaleFactor;
     return max(1, min(val, maxTextScaleFactor));
@@ -29,21 +30,24 @@ class _Page2NEWState extends State<Page2NEW> {
   final List<Map<String, String>> videoData = [
     {
       'id': 'video1',
-      'title': 'DR ABC ASSESSMENT',
+      'title': 'THE PATIENT IS NOT BREATHING',
       'thumbnail': 'assets/drabc.png',
-      'video': 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746671/closedloop/newVids/Cpr_qwmmm4.mp4',
+      'video':
+          'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746671/closedloop/newVids/Cpr_qwmmm4.mp4',
     },
     {
       'id': 'video2',
-      'title': 'HOW TO DO CPR',
+      'title': 'HOW TO CPR',
       'thumbnail': 'assets/cpr.png',
-      'video': 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746671/closedloop/newVids/Drabccardiac_xblixv.mp4',
+      'video':
+          'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746671/closedloop/newVids/Drabccardiac_xblixv.mp4',
     },
     {
       'id': 'video3',
-      'title': 'ASSESS A BREATHING PERSON',
+      'title': 'THE PATIENT IS BREATHING',
       'thumbnail': 'assets/recovery.png',
-      'video': 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746672/closedloop/newVids/Patientbreathing_sbaeu9.mp4',
+      'video':
+          'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746672/closedloop/newVids/Patientbreathing_sbaeu9.mp4',
     },
   ];
 
@@ -55,14 +59,15 @@ class _Page2NEWState extends State<Page2NEW> {
 
   Future<void> _checkIfVideosDownloaded() async {
     final dbFactory = getIdbFactory();
-    final db = await dbFactory!.open('myVideosDB', version: 1, onUpgradeNeeded: (VersionChangeEvent event) {
+    final db = await dbFactory!.open('myVideosDB', version: 1,
+        onUpgradeNeeded: (VersionChangeEvent event) {
       final db = event.database;
       db.createObjectStore('videos', keyPath: 'id');
     });
 
     final transaction = db.transaction('videos', idbModeReadOnly);
     final store = transaction.objectStore('videos');
-    
+
     // Check if all videos are downloaded
     bool allDownloaded = true;
     for (var video in videoData) {
@@ -80,90 +85,111 @@ class _Page2NEWState extends State<Page2NEW> {
     db.close();
   }
 
-Future<void> downloadAllVideos() async {
-  final dbFactory = getIdbFactory();
-  final db = await dbFactory!.open('myVideosDB', version: 1, onUpgradeNeeded: (VersionChangeEvent event) {
-    final db = event.database;
-    if (!db.objectStoreNames.contains('videos')) {
-      db.createObjectStore('videos', keyPath: 'id');
+  Future<void> downloadAllVideos() async {
+    final dbFactory = getIdbFactory();
+    final db = await dbFactory!.open('myVideosDB', version: 1,
+        onUpgradeNeeded: (VersionChangeEvent event) {
+      final db = event.database;
+      if (!db.objectStoreNames.contains('videos')) {
+        db.createObjectStore('videos', keyPath: 'id');
+      }
+    });
+
+    // Download all videos outside the IndexedDB transaction
+    List<Map<String, dynamic>> downloadedVideos = [];
+
+    for (var video in videoData) {
+      try {
+        // Download video
+        final response = await Dio().get<List<int>>(video['video']!,
+            options: Options(responseType: ResponseType.bytes));
+        final Uint8List videoBytes = Uint8List.fromList(response.data!);
+
+        // Store the video in memory for now (to avoid IndexedDB transaction issues)
+        downloadedVideos.add({'id': video['id'], 'data': videoBytes});
+      } catch (e) {
+        print('Failed to download video ${video['title']}: $e');
+      }
     }
-  });
 
-  // Download all videos outside the IndexedDB transaction
-  List<Map<String, dynamic>> downloadedVideos = [];
+    // Now store each downloaded video in IndexedDB, using a new transaction
+    for (var video in downloadedVideos) {
+      final transaction =
+          db.transaction('videos', idbModeReadWrite); // Open new transaction
+      final store = transaction.objectStore('videos');
 
-  for (var video in videoData) {
-    try {
-      // Download video
-      final response = await Dio().get<List<int>>(video['video']!, options: Options(responseType: ResponseType.bytes));
-      final Uint8List videoBytes = Uint8List.fromList(response.data!);
-
-      // Store the video in memory for now (to avoid IndexedDB transaction issues)
-      downloadedVideos.add({'id': video['id'], 'data': videoBytes});
-    } catch (e) {
-      print('Failed to download video ${video['title']}: $e');
+      try {
+        await store.put(video); // Store video in IndexedDB
+        await transaction
+            .completed; // Ensure transaction completes before moving on
+      } catch (e) {
+        print('Failed to store video ${video['id']}: $e');
+      }
     }
+
+    db.close();
+    _notifyDownloadComplete(context);
+    // After all videos are downloaded and stored, update the UI
+    setState(() {
+      videosDownloaded = true;
+    });
   }
-
-  // Now store each downloaded video in IndexedDB, using a new transaction
-  for (var video in downloadedVideos) {
-    final transaction = db.transaction('videos', idbModeReadWrite);  // Open new transaction
-    final store = transaction.objectStore('videos');
-
-    try {
-      await store.put(video);  // Store video in IndexedDB
-      await transaction.completed;  // Ensure transaction completes before moving on
-    } catch (e) {
-      print('Failed to store video ${video['id']}: $e');
-    }
-  }
-
-  db.close();
-  _notifyDownloadComplete(context);
-  // After all videos are downloaded and stored, update the UI
-  setState(() {
-    videosDownloaded = true;
-  });
-}
-
-
 
   void _notifyDownloadComplete(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Download Complete'),
-        content: Text('All videos have been successfully downloaded and are now available offline.'),
-        actions: <Widget>[
-          TextButton(
-            child: Text('OK'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Download Complete'),
+          content: Text(
+              'All videos have been successfully downloaded and are now available offline.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 56, 56, 56),
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 56, 56, 56),
-        title: const Text(
-          'CPRNow',
+      backgroundColor: Color.fromARGB(175, 27, 27, 27),
+appBar: AppBar(
+  centerTitle: true,
+  backgroundColor: Color.fromARGB(0, 0, 0, 0),
+  title: Text.rich(
+    TextSpan(
+      children: [
+        TextSpan(
+          text: 'CPR',
           style: TextStyle(
             color: Colors.white,
-            fontVariations: [FontVariation('wght', 400)],
+            fontSize: 32, // Larger font size for "CPR"
+            fontWeight: FontWeight.w900, // Bold weight for "CPR"
+            letterSpacing: 8.0, // Add letter spacing
             fontFamily: "NunitoSans",
           ),
         ),
-        leading: const Icon(Icons.all_inclusive, color: Colors.white),
-      ),
+        TextSpan(
+          text: 'NOW',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 15, // Smaller font size for "Now"
+            fontWeight: FontWeight.w400, // Semi-bold weight for "Now"
+            letterSpacing: 1, // Add letter spacing
+            fontFamily: "NunitoSans",
+          ),
+        ),
+      ],
+    ),
+  ),
+),
       body: SingleChildScrollView(
         child: Center(
           child: ConstrainedBox(
@@ -174,7 +200,8 @@ Future<void> downloadAllVideos() async {
                 children: [
                   Center(
                     child: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: _getButtonMaxWidth(context)),
+                      constraints:
+                          BoxConstraints(maxWidth: _getButtonMaxWidth(context)),
                       child: Container(
                         margin: const EdgeInsets.only(bottom: 10),
                         child: DecoratedBox(
@@ -190,29 +217,55 @@ Future<void> downloadAllVideos() async {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return Dialog(
+                    backgroundColor: Color.fromARGB(100, 0, 0, 0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Display the flowchart image
+                        Image.asset(
+                          'assets/flowchart.png',
+                          height:400,
+                          fit: BoxFit.scaleDown,
+                        ),
+                        // Button to dismiss the dialog
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Dismiss the dialog
+                          },
+                          child: const Text('Close',style: TextStyle(color: Colors.white),),
+                        ),
+                      ],
+                    ),);});},
                             style: TextButton.styleFrom(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(25),
                               ),
                             ),
-                            child: Align(
+                            child: const Align(
                               alignment: Alignment.topLeft,
                               child: Column(
                                 children: [
                                   Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Flexible(
                                         child: Text(
                                           'Lifesaver Flowchart',
-                                          textScaleFactor: 1 * ScaleSize.textScaleFactor(context),
-                                          style: const TextStyle(
-                                            fontVariations: [FontVariation('wght', 300)],
+                                          style: TextStyle(
+                                            fontVariations: [
+                                              FontVariation('wght', 400)
+                                            ],
                                             color: Colors.white,
                                             fontFamily: "NunitoSans",
-                                            fontSize: 13,
                                           ),
                                         ),
                                       ),
@@ -226,33 +279,13 @@ Future<void> downloadAllVideos() async {
                       ),
                     ),
                   ),
-                  // Display message based on whether videos are downloaded
-                  if (!videosDownloaded) ...[
-                    const Text(
-                      'Videos not yet available offline.',
-                      style: TextStyle(color: Colors.white, fontVariations: [
-                                                    FontVariation('wght', (400))
-                                                  ],
-                                                  fontFamily: "NunitoSans", fontSize: 16),
-                    ),
-                    const SizedBox(height: 10),
-                    ElevatedButton(
-                      onPressed: downloadAllVideos,
-                      child: const Text('Download All Videos'),
-                    ),
-                  ] else ...[
-                    const Row(mainAxisAlignment:MainAxisAlignment.center,children:[Text('All videos available offline  ', style:(TextStyle(color: Colors.white, fontVariations: [
-                                                    FontVariation('wght', (400))
-                                                  ],
-                                                  fontFamily: "NunitoSans", ))),Icon(Icons.cloud_download_outlined, color:Colors.white)])
-                  ],
-                  const SizedBox(height: 20),
                   // Responsive Grid Layout for Videos
                   GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: _getCrossAxisCount(context), // Adjusts based on screen width
+                      crossAxisCount: _getCrossAxisCount(
+                          context), // Adjusts based on screen width
                       crossAxisSpacing: 16,
                       mainAxisSpacing: 16,
                       childAspectRatio: 16 / 9, // Aspect ratio of video cards
@@ -262,6 +295,39 @@ Future<void> downloadAllVideos() async {
                       return _buildVideoCard(videoData[index]);
                     },
                   ),
+                  const SizedBox(height: 20),
+                  if (!videosDownloaded) ...[
+                    const Text(
+                      'Videos not yet available offline.',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontVariations: [FontVariation('wght', (400))],
+                          fontFamily: "NunitoSans",
+                          fontSize: 16),
+                    ),
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                      onPressed: downloadAllVideos,
+                      child: const Text('Download All Videos',
+                          style: TextStyle(
+                            fontFamily: "NunitoSans",
+                            fontVariations: [FontVariation('wght', (400))],
+                          )),
+                    ),
+                  ] else ...[
+                    const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('All videos available offline  ',
+                              style: (TextStyle(
+                                color: Colors.white,
+                                fontVariations: [FontVariation('wght', (400))],
+                                fontFamily: "NunitoSans",
+                              ))),
+                          Icon(Icons.cloud_download_outlined,
+                              color: Colors.white)
+                        ])
+                  ],
                 ],
               ),
             ),
@@ -275,78 +341,78 @@ Future<void> downloadAllVideos() async {
   int _getCrossAxisCount(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     if (width > 1200) return 3; // 3 columns for wide screens
-    if (width > 800) return 2;  // 2 columns for medium screens
-    return 1;                    // 1 column for smaller screens
+    if (width > 800) return 2; // 2 columns for medium screens
+    return 1; // 1 column for smaller screens
   }
 
   // Helper function to limit the max width of the content
   double _getMaxWidth(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    return width > 1300 ? 1300 : width * 0.9; // Max width of 1300px or 90% of screen width
+    return width > 1300
+        ? 1300
+        : width * 0.9; // Max width of 1300px or 90% of screen width
   }
 
   // Helper function to limit the max width of the button
   double _getButtonMaxWidth(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    return width > 600 ? 600 : width * 0.8; // Max width of 400px for the button or 80% of screen width
+    return width > 600
+        ? 400
+        : width *
+            0.8; // Max width of 400px for the button or 80% of screen width
   }
 
   Widget _buildVideoCard(Map<String, String> video) {
     return Card(
+      color: Color.fromARGB(175, 27, 27, 27),
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: Stack(
+        alignment: Alignment.center,
         children: [
           ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(15)),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
             child: Stack(
               children: <Widget>[
                 Image.asset(
+                  color: Color.fromARGB(200, 0, 0, 0),
+                  colorBlendMode: BlendMode.luminosity,
                   video['thumbnail']!,
                   height: double.infinity,
                   width: double.infinity,
                   fit: BoxFit.cover,
                 ),
-                Positioned.fill(
-                  child: Opacity(
-                    opacity: 0.5,
-                    child: Container(
-                      color: const Color(0xFF000000),
-                    ),
-                  ),
-                ),
+
               ],
             ),
           ),
-          Positioned(
-            bottom: 20,
-            left: 16,
-            right: 16,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+ Column(crossAxisAlignment: CrossAxisAlignment.center,
+ mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                SizedBox(width:200,child:
+                Text( 
                   textAlign: TextAlign.center,
                   video['title']!,
                   style: const TextStyle(
-                    fontFamily: "Inter",
+                    fontFamily: "Amaranth",
                     color: Colors.white,
                     fontSize: 25,
                     fontWeight: FontWeight.w500,
                   ),
-                ),
+                ),),
                 const SizedBox(height: 10),
                 ElevatedButton(
-                  onPressed: () => _playVideo(context, video['id']!, video['video']!),
+                  onPressed: () =>
+                      _playVideo(context, video['id']!, video['video']!),
                   style: ElevatedButton.styleFrom(
                     shape: const CircleBorder(),
                     backgroundColor: Colors.black.withOpacity(0.01),
                   ),
-                  child: const Icon(Icons.play_arrow, size: 30, color: Colors.white),
+                  child: const Icon(Icons.play_arrow,
+                      size: 30, color: Colors.white),
                 ),
               ],
             ),
-          ),
         ],
       ),
     );
@@ -391,7 +457,8 @@ Future<void> downloadAllVideos() async {
 
   Future<String> loadVideo(String videoId, String videoUrl) async {
     final dbFactory = getIdbFactory();
-    final db = await dbFactory!.open('myVideosDB', version: 1, onUpgradeNeeded: (VersionChangeEvent event) {
+    final db = await dbFactory!.open('myVideosDB', version: 1,
+        onUpgradeNeeded: (VersionChangeEvent event) {
       final db = event.database;
       db.createObjectStore('videos', keyPath: 'id');
     });
@@ -406,9 +473,9 @@ Future<void> downloadAllVideos() async {
       final Uint8List data = result['data'] as Uint8List;
       final blob = Blob([data], 'video/mp4');
       final url = Url.createObjectUrl(blob);
-      return url;  // Local blob URL for playback
+      return url; // Local blob URL for playback
     } else {
-      return videoUrl;  // Fallback to the original network URL if not downloaded
+      return videoUrl; // Fallback to the original network URL if not downloaded
     }
   }
 

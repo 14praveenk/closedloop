@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
+<!DOCTYPE html><html><head>
   <!--
     If you are serving your web app in a path other than the root, change the
     href value below to reflect the base path you are serving from.
@@ -27,7 +25,7 @@
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/png" href="favicon.png">
 
   <title>CPRNow</title>
   <link rel="manifest" href="manifest.json">
@@ -37,21 +35,104 @@
     const serviceWorkerVersion = null;
   </script>
   <!-- This script adds the flutter initialization JS code -->
-  <script src="flutter.js" defer></script>
-</head>
-<style>
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+  <script src="flutter.js" defer=""></script>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <style id="splash-screen-style">
+    html {
+      height: 100%
+    }
 
-</style>
+    body {
+      margin: 0;
+      min-height: 100%;
+      background-color: #42a5f5;
+          background-size: 100% 100%;
+    }
+
+    .center {
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+
+    .contain {
+      display:block;
+      width:100%; height:100%;
+      object-fit: contain;
+    }
+
+    .stretch {
+      display:block;
+      width:100%; height:100%;
+    }
+
+    .cover {
+      display:block;
+      width:100%; height:100%;
+      object-fit: cover;
+    }
+
+    .bottom {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      -ms-transform: translate(-50%, 0);
+      transform: translate(-50%, 0);
+    }
+
+    .bottomLeft {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+
+    .bottomRight {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+  </style>
+  <script id="splash-screen-script">
+    function removeSplashFromWeb() {
+      document.getElementById("splash")?.remove();
+      document.getElementById("splash-branding")?.remove();
+      document.body.style.background = "transparent";
+    }
+  </script>
+</head>
+
 <body style="height:100vh;display: flex;
 align-items: center;
-background-color: rgba(0, 0, 0, 0.815);font-size:5em;justify-content:center;color:white;animation: fadeIn 1s forwards;">
-  <div id="loading"><svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" fill="currentColor" class="bi bi-infinity" viewBox="0 0 16 16">
-    <path d="M5.68 5.792 7.345 7.75 5.681 9.708a2.75 2.75 0 1 1 0-3.916ZM8 6.978 6.416 5.113l-.014-.015a3.75 3.75 0 1 0 0 5.304l.014-.015L8 8.522l1.584 1.865.014.015a3.75 3.75 0 1 0 0-5.304l-.014.015zm.656.772 1.663-1.958a2.75 2.75 0 1 1 0 3.916z"/>
-  </svg></div>
+background-color: #252525;font-size:5em;justify-content:center;color:white;animation: fadeIn 1s forwards;">
+  <picture id="splash">
+      <source srcset="splash/img/light-1x.png 1x, splash/img/light-2x.png 2x, splash/img/light-3x.png 3x, splash/img/light-4x.png 4x" media="(prefers-color-scheme: light)">
+      <source srcset="splash/img/dark-1x.png 1x, splash/img/dark-2x.png 2x, splash/img/dark-3x.png 3x, splash/img/dark-4x.png 4x" media="(prefers-color-scheme: dark)">
+      <img class="center" aria-hidden="true" src="splash/img/light-1x.png" alt="">
+  </picture>
+  
+  
+  
+  
+  
+  
+  
   <script>
     window.addEventListener('load', function(ev) {
       var loading = document.querySelector('#loading');
@@ -68,5 +149,6 @@ background-color: rgba(0, 0, 0, 0.815);font-size:5em;justify-content:center;colo
       });
     });
   </script>
-</body>
-</html>
+
+
+</body></html>

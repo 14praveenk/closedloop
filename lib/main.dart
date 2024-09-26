@@ -57,7 +57,7 @@ class _MainPageState extends State<MainPage> {
 
   Widget buildBottomBar() {
     return CubertoBottomBar(
-      barBackgroundColor: Color.fromARGB(255, 56, 56, 56),
+      barBackgroundColor: Color.fromARGB(175, 27, 27, 27),
       selectedTab: _currentPage,
       tabStyle: CubertoTabStyle.styleFadedBackground,
       inactiveIconColor: Colors.white,
@@ -85,10 +85,10 @@ class _MainPageState extends State<MainPage> {
 
   NavigationRail buildNavigationRail() {
     return NavigationRail(
-      backgroundColor: Color.fromARGB(255, 56, 56, 56),
+      backgroundColor: Color.fromARGB(175, 27, 27, 27),
       selectedIndex: _controller.index,
       useIndicator: true,
-      indicatorColor: Color.fromARGB(29, 171, 199, 46),
+      indicatorColor: Color.fromARGB(175, 27, 27, 27),
       onDestinationSelected: (index) {
         setState(() {
           _controller.index = index;
@@ -100,12 +100,12 @@ class _MainPageState extends State<MainPage> {
         NavigationRailDestination(
           icon: Icon(Icons.video_call_outlined, color: Colors.white),
           selectedIcon: Icon(Icons.video_call_outlined, color: Color.fromARGB(255, 217, 221, 4)),
-          label: Text('Watch',style: TextStyle(color:Colors.white),),
+          label: Text('Watch',style: TextStyle(fontFamily:"NunitoSans",fontVariations: [FontVariation('wght', 600)], color:Colors.white),),
         ),
         NavigationRailDestination(
           icon: Icon(Icons.school_outlined, color: Colors.white),
           selectedIcon: Icon(Icons.school_outlined, color: Color.fromARGB(255, 217, 221, 4)),
-          label: Text('Learn',style: TextStyle(color:Colors.white)),
+          label: Text('Learn',style: TextStyle(fontFamily:"NunitoSans", fontVariations: [FontVariation('wght', 600)],color:Colors.white)),
         ),
       ],
     );
