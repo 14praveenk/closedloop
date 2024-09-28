@@ -31,21 +31,21 @@ class _Page2NEWState extends State<Page2NEW> {
     {
       'id': 'video1',
       'title': 'THE PATIENT IS NOT BREATHING',
-      'thumbnail': 'assets/drabc.png',
-      'video':
-          'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746671/closedloop/newVids/Cpr_qwmmm4.mp4',
-    },
-    {
-      'id': 'video2',
-      'title': 'HOW TO CPR',
-      'thumbnail': 'assets/cpr.png',
+      'thumbnail': 'assets/drabcThumb.jpg',
       'video':
           'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746671/closedloop/newVids/Drabccardiac_xblixv.mp4',
     },
     {
+      'id': 'video2',
+      'title': 'HOW TO CPR',
+      'thumbnail': 'assets/cprThumb.jpg',
+      'video':
+          'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746671/closedloop/newVids/Cpr_qwmmm4.mp4',
+    },
+    {
       'id': 'video3',
       'title': 'THE PATIENT IS BREATHING',
-      'thumbnail': 'assets/recovery.png',
+      'thumbnail': 'assets/assessThumb.jpg',
       'video':
           'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746672/closedloop/newVids/Patientbreathing_sbaeu9.mp4',
     },
@@ -375,8 +375,6 @@ appBar: AppBar(
             child: Stack(
               children: <Widget>[
                 Image.asset(
-                  color: Color.fromARGB(200, 0, 0, 0),
-                  colorBlendMode: BlendMode.luminosity,
                   video['thumbnail']!,
                   height: double.infinity,
                   width: double.infinity,
@@ -386,21 +384,14 @@ appBar: AppBar(
               ],
             ),
           ),
- Column(crossAxisAlignment: CrossAxisAlignment.center,
- mainAxisAlignment: MainAxisAlignment.center,
+ Positioned(
+            bottom: 20,
+            left: 16,
+            right: 16,child:Column(crossAxisAlignment: CrossAxisAlignment.center,
+ mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                SizedBox(width:200,child:
-                Text( 
-                  textAlign: TextAlign.center,
-                  video['title']!,
-                  style: const TextStyle(
-                    fontFamily: "Amaranth",
-                    color: Colors.white,
-                    fontSize: 25,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),),
                 const SizedBox(height: 10),
+                Positioned(top:10,child:
                 ElevatedButton(
                   onPressed: () =>
                       _playVideo(context, video['id']!, video['video']!),
@@ -409,10 +400,10 @@ appBar: AppBar(
                     backgroundColor: Colors.black.withOpacity(0.01),
                   ),
                   child: const Icon(Icons.play_arrow,
-                      size: 30, color: Colors.white),
-                ),
+                      size: 40, color: Colors.white),
+                ),),
               ],
-            ),
+            ),),
         ],
       ),
     );
