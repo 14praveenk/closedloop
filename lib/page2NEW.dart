@@ -375,6 +375,8 @@ appBar: AppBar(
             child: Stack(
               children: <Widget>[
                 Image.asset(
+                  color: Color.fromARGB(200, 0, 0, 0),
+                  colorBlendMode: BlendMode.luminosity,
                   video['thumbnail']!,
                   height: double.infinity,
                   width: double.infinity,
@@ -384,14 +386,14 @@ appBar: AppBar(
               ],
             ),
           ),
- Positioned(
+           Positioned(
             bottom: 20,
             left: 16,
-            right: 16,child:Column(crossAxisAlignment: CrossAxisAlignment.center,
- mainAxisAlignment: MainAxisAlignment.end,
+            right: 16,child:
+ Column(crossAxisAlignment: CrossAxisAlignment.center,
+ mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 10),
-                Positioned(top:10,child:
                 ElevatedButton(
                   onPressed: () =>
                       _playVideo(context, video['id']!, video['video']!),
@@ -400,11 +402,11 @@ appBar: AppBar(
                     backgroundColor: Colors.black.withOpacity(0.01),
                   ),
                   child: const Icon(Icons.play_arrow,
-                      size: 40, color: Colors.white),
-                ),),
+                      size: 35, color: Colors.white),
+                ),
               ],
-            ),),
-        ],
+            ),
+      ),],
       ),
     );
   }
