@@ -375,8 +375,6 @@ appBar: AppBar(
             child: Stack(
               children: <Widget>[
                 Image.asset(
-                  color: Color.fromARGB(200, 0, 0, 0),
-                  colorBlendMode: BlendMode.luminosity,
                   video['thumbnail']!,
                   height: double.infinity,
                   width: double.infinity,
