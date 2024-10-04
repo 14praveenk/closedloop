@@ -42,7 +42,7 @@ class _MainPageState extends State<MainPage> {
     _promptShown = window.localStorage['prompt_shown'] == 'true';
 
     // Check for iOS and show prompt if not shown before
-    if ( !_promptShown) {
+    if (defaultTargetPlatform == TargetPlatform.iOS && !_promptShown) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _showInstallPrompt();
       });
