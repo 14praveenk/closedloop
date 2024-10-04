@@ -1,6 +1,7 @@
 import 'dart:html';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'dart:typed_data';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
@@ -26,6 +27,9 @@ class _Page2NEWState extends State<Page2NEW> {
   late VideoPlayerController _videoPlayerController;
   late ChewieController _chewieController;
   bool videosDownloaded = false;
+  int selectedVideoId = 0;
+  MaterialColor colorButton1 = Colors.blueGrey;
+  MaterialColor colorButton2 = Colors.blueGrey;
 
   final List<Map<String, String>> videoData = [
     {
@@ -156,186 +160,193 @@ class _Page2NEWState extends State<Page2NEW> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color.fromARGB(175, 27, 27, 27),
-appBar: AppBar(
-  centerTitle: true,
-  backgroundColor: Color.fromARGB(0, 0, 0, 0),
-  title: Text.rich(
-    TextSpan(
-      children: [
-        TextSpan(
-          text: 'CPR',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 32, // Larger font size for "CPR"
-            fontWeight: FontWeight.w900, // Bold weight for "CPR"
-            letterSpacing: 8.0, // Add letter spacing
-            fontFamily: "NunitoSans",
-          ),
-        ),
-        TextSpan(
-          text: 'NOW',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 15, // Smaller font size for "Now"
-            fontWeight: FontWeight.w400, // Semi-bold weight for "Now"
-            letterSpacing: 1, // Add letter spacing
-            fontFamily: "NunitoSans",
-          ),
-        ),
-      ],
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: Color.fromARGB(175, 27, 27, 27),
+    appBar: AppBar(
+      centerTitle: true,
+      backgroundColor: Color.fromARGB(0, 0, 0, 0),
+      title: SvgPicture.asset(
+        'assets/newLogo.svg',
+        height: 45, // Adjust the height according to your needs
+        fit: BoxFit.contain,
+      ),
     ),
-  ),
-),
-      body: SingleChildScrollView(
-        child: Center(
+    body: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween, // Use spaceBetween to push content
+      children: [
+        Center(
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: _getMaxWidth(context)),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  Center(
-                    child: ConstrainedBox(
-                      constraints:
-                          BoxConstraints(maxWidth: _getButtonMaxWidth(context)),
-                      child: Container(
-                        margin: const EdgeInsets.only(bottom: 10),
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [
-                                Color.fromARGB(255, 255, 149, 50),
-                                Color.fromARGB(255, 203, 44, 44),
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: TextButton(
-                            onPressed: () {showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return Dialog(
-                    backgroundColor: Color.fromARGB(255, 0, 0, 0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
+                  // Your existing UI components here...
+                  Text(
+                    'Step 1: CALL 999',
+                    style: TextStyle(
+                      fontSize: 35,
+                      color: Colors.white,
+                      fontFamily: 'Avenir-Heavy',
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        // Display the flowchart image
-                        Image.asset(
-                          'assets/flowchart.png',
-                          height:400,
-                          fit: BoxFit.scaleDown,
-                        ),
-                        // Button to dismiss the dialog
-                        TextButton(
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    'Step 2: Is the patient breathing normally?',
+                    style: TextStyle(
+                      fontSize: 24,
+                      color: Colors.white,
+                      fontFamily: 'Avenir',
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 40),
+                  // Your existing button layout...
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 400,
+                        margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: colorButton1,
+                            padding: EdgeInsets.all(20),
+                          ),
                           onPressed: () {
-                            Navigator.of(context).pop(); // Dismiss the dialog
+                            _handleBreathingQuestion(true); // Breathing
                           },
-                          child: const Text('Close',style: TextStyle(color: Colors.white),),
-                        ),
-                      ],
-                    ),);});},
-                            style: TextButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                            ),
-                            child: const Align(
-                              alignment: Alignment.topLeft,
-                              child: Column(
-                                children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Flexible(
-                                        child: Text(
-                                          'Lifesaver Flowchart',
-                                          style: TextStyle(
-                                            fontVariations: [
-                                              FontVariation('wght', 400)
-                                            ],
-                                            color: Colors.white,
-                                            fontFamily: "NunitoSans",
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                          child: Text(
+                            'Patient is Breathing',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Avenir-Heavy',
+                              color: Colors.white,
                             ),
                           ),
                         ),
                       ),
-                    ),
+                      Container(
+                        width: 400,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: colorButton2,
+                            padding: EdgeInsets.all(20),
+                          ),
+                          onPressed: () {
+                            _handleBreathingQuestion(false); // Not Breathing
+                          },
+                          child: Text(
+                            'Patient is Not Breathing',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontFamily: 'Avenir-Heavy',
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  // Responsive Grid Layout for Videos
-                  GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: _getCrossAxisCount(
-                          context), // Adjusts based on screen width
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                      childAspectRatio: 16 / 9, // Aspect ratio of video cards
+                  Center(child: const SizedBox(height: 20)),
+                  // Video selection logic...
+                  if (selectedVideoId != 0) ...[
+                    Container(
+                      color: Color.fromARGB(175, 27, 27, 27),
+                      height: 200,
+                      child: AspectRatio(
+                        aspectRatio: 16 / 9,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            ClipRRect(
+                              borderRadius: const BorderRadius.all(Radius.circular(10)),
+                              child: Stack(
+                                children: <Widget>[
+                                  Image.asset(
+                                    videoData[selectedVideoId]['thumbnail']!,
+                                    height: double.infinity,
+                                    width: double.infinity,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Positioned(
+                              bottom: 20,
+                              left: 16,
+                              right: 16,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const SizedBox(height: 10),
+                                  ElevatedButton(
+                                    onPressed: () => _playVideo(
+                                      context,
+                                      videoData[selectedVideoId]['id']!,
+                                      videoData[selectedVideoId]['video']!,
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                      shape: const CircleBorder(),
+                                      backgroundColor: Colors.black.withOpacity(0.01),
+                                    ),
+                                    child: const Icon(Icons.play_arrow, size: 35, color: Colors.white),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    itemCount: videoData.length,
-                    itemBuilder: (context, index) {
-                      return _buildVideoCard(videoData[index]);
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  if (!videosDownloaded) ...[
-                    const Text(
-                      'Videos not yet available offline.',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontVariations: [FontVariation('wght', (400))],
-                          fontFamily: "NunitoSans",
-                          fontSize: 16),
-                    ),
-                    const SizedBox(height: 10),
-                    ElevatedButton(
-                      onPressed: downloadAllVideos,
-                      child: const Text('Download All Videos',
-                          style: TextStyle(
-                            fontFamily: "NunitoSans",
-                            fontVariations: [FontVariation('wght', (400))],
-                          )),
-                    ),
-                  ] else ...[
-                    const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('All videos available offline  ',
-                              style: (TextStyle(
-                                color: Colors.white,
-                                fontVariations: [FontVariation('wght', (400))],
-                                fontFamily: "NunitoSans",
-                              ))),
-                          Icon(Icons.cloud_download_outlined,
-                              color: Colors.white)
-                        ])
                   ],
                 ],
               ),
             ),
           ),
         ),
-      ),
-    );
-  }
+        // This part handles the offline video availability message
+        if (!videosDownloaded) ...[
+          Container(margin:EdgeInsets.fromLTRB(0, 0, 0, 20),child:Column(children:[
+          TextButton(
+            child: const Text('Videos not yet available offline. Tap here to download',style: TextStyle(
+              color: Colors.white,
+                      fontFamily: "Avenir",
+              fontSize: 16,
+            )),
+            onPressed: downloadAllVideos,
+          ),            
+    ]))] else ...[
+          Container(margin:EdgeInsets.fromLTRB(0, 0, 0, 20),child:Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    'All videos available offline  ',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: "Avenir",
+                      fontSize:16,
+                    ),
+                  ),
+                  Icon(Icons.cloud_download_outlined, color: Colors.white),
+                ],
+              ),
+            ],
+          ),),
+        ],
+      ],
+    ),
+  );
+}
 
   // Helper function to determine how many columns to show based on screen width
   int _getCrossAxisCount(BuildContext context) {
@@ -362,6 +373,29 @@ appBar: AppBar(
             0.8; // Max width of 400px for the button or 80% of screen width
   }
 
+  void _handleBreathingQuestion(bool isBreathing) {
+    if (isBreathing) {
+      // Patient is breathing
+      setState(() {
+        selectedVideoId = 2;
+        colorButton1 = Colors.green;
+        colorButton2 = Colors.blueGrey;
+      });
+    } else {
+      // Patient is not breathing
+      setState(() {
+        selectedVideoId = 1;
+        colorButton1 = Colors.blueGrey;
+        colorButton2 = Colors.green;
+      });
+      // Optionally, show CPR video or handle it differently
+      // setState(() {
+      //   selectedVideoId = videoData[1]['id'];
+      //   selectedVideoUrl = videoData[1]['video'];
+      // });
+    }
+  }
+
   Widget _buildVideoCard(Map<String, String> video) {
     return Card(
       color: Color.fromARGB(175, 27, 27, 27),
@@ -380,16 +414,16 @@ appBar: AppBar(
                   width: double.infinity,
                   fit: BoxFit.cover,
                 ),
-
               ],
             ),
           ),
-           Positioned(
+          Positioned(
             bottom: 20,
             left: 16,
-            right: 16,child:
- Column(crossAxisAlignment: CrossAxisAlignment.center,
- mainAxisAlignment: MainAxisAlignment.center,
+            right: 16,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 10),
                 ElevatedButton(
@@ -404,7 +438,8 @@ appBar: AppBar(
                 ),
               ],
             ),
-      ),],
+          ),
+        ],
       ),
     );
   }
@@ -417,7 +452,7 @@ appBar: AppBar(
           _chewieController = ChewieController(
             videoPlayerController: _videoPlayerController,
             aspectRatio: _videoPlayerController.value.aspectRatio,
-            autoPlay: false,
+            autoPlay: true,
             looping: false,
           );
         });
@@ -429,14 +464,14 @@ appBar: AppBar(
             child: Container(
               constraints: BoxConstraints(maxWidth: 600),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Colors.transparent,
                 borderRadius: BorderRadius.circular(15),
               ),
               padding: const EdgeInsets.all(8),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: SizedBox(
-                  height: 400,
+                child: AspectRatio(
+                  aspectRatio: _videoPlayerController.value.aspectRatio,
                   child: Chewie(controller: _chewieController),
                 ),
               ),

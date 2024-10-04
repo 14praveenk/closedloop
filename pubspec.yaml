@@ -38,14 +38,19 @@ dependencies:
   flutter_native_splash: ^2.4.0
   card_swiper : ^3.0.0
   animated_notch_bottom_bar: ^1.0.0
-  video_player: ^2.2.14
+  video_player: ^2.9.2
   path_provider: ^2.0.8
   dio: ^5.0.0
   permission_handler: ^11.3.1
-  chewie: ^1.8.1
+  chewie: ^1.8.5
   universal_html: ^2.2.4
   idb_shim: ^2.4.1+1
   cuberto_bottom_bar: ^3.1.0
+  flutter_svg: ^1.0.3
+  better_player_plus: ^1.0.7
+  pod_player: ^0.2.2
+  flutter_launcher_icons: ^0.14.1
+  shared_preferences: ^2.2.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -100,6 +105,12 @@ flutter:
           style: italic
         - asset: fonts/Amaranth-Regular.ttf
           weight: 400
+    - family: Avenir-Heavy
+      fonts:
+        - asset: fonts/Avenir-Heavy.ttf
+    - family: Avenir
+      fonts:
+        - asset: fonts/Avenir.ttf
     - family: NunitoSans
       fonts:
         - asset: fonts/NunitoSans-Variable.ttf
