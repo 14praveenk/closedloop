@@ -1,6 +1,6 @@
 # closed_loop
 
-A new Flutter project.
+Revive App
 
 ## Getting Started
 
