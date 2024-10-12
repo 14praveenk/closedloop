@@ -1,6 +1,8 @@
 import 'dart:html';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'dart:typed_data';
 import 'package:video_player/video_player.dart';
@@ -24,13 +26,12 @@ class Page2NEW extends StatefulWidget {
 }
 
 class _Page2NEWState extends State<Page2NEW> {
-  late VideoPlayerController _videoPlayerController;
-  late ChewieController _chewieController;
+  VideoPlayerController? _videoPlayerController2;
+  ChewieController? _chewieController;
   bool videosDownloaded = false;
   int selectedVideoId = 0;
-  MaterialColor colorButton1 = Colors.blueGrey;
-  MaterialColor colorButton2 = Colors.blueGrey;
-
+  Color colorButton1 = Color.fromARGB(255, 255, 217, 0);
+  Color colorButton2 = Color.fromARGB(255, 255, 217, 0);
   final List<Map<String, String>> videoData = [
     {
       'id': 'video1',
@@ -53,6 +54,7 @@ class _Page2NEWState extends State<Page2NEW> {
       'video':
           'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746672/closedloop/newVids/Patientbreathing_sbaeu9.mp4',
     },
+    
   ];
 
   @override
@@ -160,110 +162,185 @@ class _Page2NEWState extends State<Page2NEW> {
     );
   }
 
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    backgroundColor: Color.fromARGB(175, 27, 27, 27),
-    appBar: AppBar(
-      centerTitle: true,
-      backgroundColor: Color.fromARGB(0, 0, 0, 0),
-      title: SvgPicture.asset(
-        'assets/newLogo.svg',
-        height: 45, // Adjust the height according to your needs
-        fit: BoxFit.contain,
-      ),
-    ),
-    body: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween, // Use spaceBetween to push content
-      children: [
-        Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: _getMaxWidth(context)),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color.fromARGB(175, 27, 27, 27),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+              child: SvgPicture.asset(
+                'assets/newLogo.svg',
+                height: 160, // Adjust the height according to your needs
+                fit: BoxFit.contain,
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 20),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Your existing UI components here...
-                  Text(
-                    'Step 1: CALL 999',
-                    style: TextStyle(
-                      fontSize: 35,
-                      color: Colors.white,
-                      fontFamily: 'Avenir-Heavy',
+                  Row(children: [
+                    Container(
+                      margin: EdgeInsets.only(right: 20),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color.fromRGBO(
+                            255, 215, 0, 1), // Change color as needed
+                      ),
+                      child: Center(
+                          child: Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(
+                              8 * ScaleSize.textScaleFactor(context)),
+                          child: Text(
+                            '1',
+                            textScaler: TextScaler.linear(
+                                1.5 * ScaleSize.textScaleFactor(context)),
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Avenir',
+                            ),
+                          ),
+                        ),
+                      )),
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    'Step 2: Is the patient breathing normally?',
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: Colors.white,
-                      fontFamily: 'Avenir',
+                    Text(
+                      'Call 999',
+                      textScaler: TextScaler.linear(
+                          1.5 * ScaleSize.textScaleFactor(context)),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Avenir',
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
+                  ]),
+                  Container(
+                    margin: EdgeInsets.only(
+                        left: 13 * ScaleSize.textScaleFactor(context)),
+                    width: 2,
+                    height: 60,
+                    color: Color.fromRGBO(255, 215, 0, 1), // Progress bar color
                   ),
-                  SizedBox(height: 40),
+                  Row(children: [
+                    Container(
+                      margin: EdgeInsets.only(right: 20),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color.fromRGBO(
+                            255, 215, 0, 1), // Change color as needed
+                      ),
+                      child: Center(
+                        child: Padding(
+                          padding: EdgeInsets.all(
+                              8 * ScaleSize.textScaleFactor(context)),
+                          child: Text(
+                            '2',
+                            textScaler: TextScaler.linear(
+                                1.5 * ScaleSize.textScaleFactor(context)),
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Avenir',
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                        child: Text(
+                      'Is the patient breathing normally?',
+                      softWrap: true,
+                      textScaler: TextScaler.linear(
+                          1.5 * ScaleSize.textScaleFactor(context)),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Avenir',
+                      ),
+                    ))
+                  ]),
                   // Your existing button layout...
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 400,
-                        margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: colorButton1,
-                            padding: EdgeInsets.all(20),
-                          ),
-                          onPressed: () {
-                            _handleBreathingQuestion(true); // Breathing
-                          },
-                          child: Text(
-                            'Patient is Breathing',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: 'Avenir-Heavy',
-                              color: Colors.white,
+                  Row(crossAxisAlignment:CrossAxisAlignment.start,children: [
+         LayoutBuilder(
+                        builder: (context, constraints) {
+                          // Calculate remaining height
+                          double screenHeight = MediaQuery.of(context).size.height;
+                          double remainingHeight = screenHeight - 470; // Adjust based on actual height of other widgets
+
+                          return Container(
+                            margin: EdgeInsets.only(
+                          left: 13 * ScaleSize.textScaleFactor(context)),
+                            width: 2,
+                            height: remainingHeight,
+                            color: Color.fromRGBO(
+                                255, 215, 0, 1), // Progress bar color
+                          );
+                        }),
+                    Container(
+                      margin: EdgeInsets.only(
+                          left: 35 * ScaleSize.textScaleFactor(context), top:20),
+                      child: Column(crossAxisAlignment:CrossAxisAlignment.start,mainAxisAlignment:MainAxisAlignment.start,children:[Row(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: colorButton1,
+                                padding: EdgeInsets.all(15),
+                              ),
+                              onPressed: () {
+                                _handleBreathingQuestion(true); // Breathing
+                              },
+                              child: Text(
+                                'Yes',
+                                textScaler: TextScaler.linear(
+                                    1.5*ScaleSize.textScaleFactor(context)),
+                                style: TextStyle(
+                                  fontFamily: 'Avenir-Heavy',
+                                  color: Colors.black,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      Container(
-                        width: 400,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: colorButton2,
-                            padding: EdgeInsets.all(20),
-                          ),
-                          onPressed: () {
-                            _handleBreathingQuestion(false); // Not Breathing
-                          },
-                          child: Text(
-                            'Patient is Not Breathing',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontFamily: 'Avenir-Heavy',
-                              color: Colors.white,
+                          Container(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: colorButton2,
+                                padding: EdgeInsets.all(15),
+                              ),
+                              onPressed: () {
+                                _handleBreathingQuestion(
+                                    false); // Not Breathing
+                              },
+                              child: Text(
+                                'No',
+                                textScaler: TextScaler.linear(
+                                    1.5*ScaleSize.textScaleFactor(context)),
+                                style: TextStyle(
+                                  fontFamily: 'Avenir-Heavy',
+                                  color: Colors.black,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Center(child: const SizedBox(height: 20)),
-                  // Video selection logic...
+                        ],
+                      ), 
+                      SizedBox(height: 20),
+                                       // Video selection logic...
                   if (selectedVideoId != 0) ...[
                     Container(
                       color: Color.fromARGB(175, 27, 27, 27),
-                      height: 200,
+                      height: 150*ScaleSize.textScaleFactor(context),
                       child: AspectRatio(
                         aspectRatio: 16 / 9,
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
                             ClipRRect(
-                              borderRadius: const BorderRadius.all(Radius.circular(10)),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10)),
                               child: Stack(
                                 children: <Widget>[
                                   Image.asset(
@@ -292,9 +369,11 @@ Widget build(BuildContext context) {
                                     ),
                                     style: ElevatedButton.styleFrom(
                                       shape: const CircleBorder(),
-                                      backgroundColor: Colors.black.withOpacity(0.01),
+                                      backgroundColor:
+                                          Colors.black.withOpacity(0.01),
                                     ),
-                                    child: const Icon(Icons.play_arrow, size: 35, color: Colors.white),
+                                    child: const Icon(Icons.play_arrow,
+                                        size: 35, color: Colors.white),
                                   ),
                                 ],
                               ),
@@ -304,49 +383,63 @@ Widget build(BuildContext context) {
                       ),
                     ),
                   ],
+                    ]),),
+                  ]),
+
+              
+
                 ],
               ),
             ),
-          ),
-        ),
-        // This part handles the offline video availability message
-        if (!videosDownloaded) ...[
-          Container(margin:EdgeInsets.fromLTRB(0, 0, 0, 20),child:Column(children:[
-          TextButton(
-            child: const Text('Videos not yet available offline. Tap here to download',style: TextStyle(
-              color: Colors.white,
-                      fontFamily: "Avenir",
-              fontSize: 16,
-            )),
-            onPressed: downloadAllVideos,
-          ),            
-    ]))] else ...[
-          Container(margin:EdgeInsets.fromLTRB(0, 0, 0, 20),child:Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    'All videos available offline  ',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: "Avenir",
-                      fontSize:16,
+            // This part handles the offline video availability message
+            if (!videosDownloaded) ...[
+              Container(
+                  margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                  child: Column(children: [
+                    TextButton(
+                      child: const Text(
+                        textAlign: TextAlign.center,
+                          'Videos not yet available offline. Tap here to download',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: "Avenir",
+                            fontSize: 16,
+                          )),
+                      onPressed: downloadAllVideos,
                     ),
-                  ),
-                  Icon(Icons.cloud_download_outlined, color: Colors.white),
-                ],
+                  ]))
+            ] else ...[
+              Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          'All videos available offline  ',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: "Avenir",
+                            fontSize: 16,
+                          ),
+                        ),
+                        Icon(Icons.cloud_download_outlined,
+                            color: Colors.white),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ],
-          ),),
-        ],
-      ],
-    ),
-  );
-}
+          ],
+        ),
+      ),
+    );
+  }
 
   // Helper function to determine how many columns to show based on screen width
   int _getCrossAxisCount(BuildContext context) {
@@ -379,13 +472,13 @@ Widget build(BuildContext context) {
       setState(() {
         selectedVideoId = 2;
         colorButton1 = Colors.green;
-        colorButton2 = Colors.blueGrey;
+        colorButton2 = Color.fromARGB(255, 255, 217, 0);
       });
     } else {
       // Patient is not breathing
       setState(() {
         selectedVideoId = 1;
-        colorButton1 = Colors.blueGrey;
+        colorButton1 = Color.fromARGB(255, 255, 217, 0);
         colorButton2 = Colors.green;
       });
       // Optionally, show CPR video or handle it differently
@@ -446,12 +539,12 @@ Widget build(BuildContext context) {
 
   void _playVideo(BuildContext context, String videoId, String videoUrl) async {
     String localVideoUrl = await loadVideo(videoId, videoUrl);
-    _videoPlayerController = VideoPlayerController.network(localVideoUrl)
-      ..initialize().then((_) {
+    _videoPlayerController2 = VideoPlayerController.network(localVideoUrl);
+      _videoPlayerController2!.initialize().then((_) {
         setState(() {
           _chewieController = ChewieController(
-            videoPlayerController: _videoPlayerController,
-            aspectRatio: _videoPlayerController.value.aspectRatio,
+            videoPlayerController: _videoPlayerController2!,
+            aspectRatio: _videoPlayerController2!.value.aspectRatio,
             autoPlay: true,
             looping: false,
           );
@@ -471,8 +564,8 @@ Widget build(BuildContext context) {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: AspectRatio(
-                  aspectRatio: _videoPlayerController.value.aspectRatio,
-                  child: Chewie(controller: _chewieController),
+                  aspectRatio: _videoPlayerController2!.value.aspectRatio,
+                  child: Chewie(controller: _chewieController!),
                 ),
               ),
             ),
@@ -507,8 +600,8 @@ Widget build(BuildContext context) {
 
   @override
   void dispose() {
-    _videoPlayerController.dispose();
-    _chewieController.dispose();
+    _videoPlayerController2?.dispose();
+    _chewieController?.dispose();
     super.dispose();
   }
 }
