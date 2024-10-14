@@ -1,5 +1,5 @@
-name: closed_loop
-description: "Improving closed-loop communication across healthcare"
+name: REVIVE
+description: "Learn basic life-saving skills now."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -47,8 +47,6 @@ dependencies:
   idb_shim: ^2.4.1+1
   cuberto_bottom_bar: ^3.1.0
   flutter_svg: ^1.0.3
-  better_player_plus: ^1.0.7
-  pod_player: ^0.2.2
   flutter_launcher_icons: ^0.14.1
   shared_preferences: ^2.2.3
 dev_dependencies:
@@ -74,6 +72,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/videos/
   fonts:
     - family: Inter
       fonts:
