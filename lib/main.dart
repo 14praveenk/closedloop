@@ -20,11 +20,68 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: MainPage(),
+      home: const OnBoardingPage(), // Load the welcome page first
     );
   }
 }
 
+// Create a new OnBoardingPage class
+class OnBoardingPage extends StatelessWidget {
+  const OnBoardingPage({Key? key}) : super(key: key);
+
+  // This function will navigate to the MainPage when the button is pressed
+  void _onIntroEnd(BuildContext context) {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(builder: (_) => MainPage()), // Replace with the MainPage
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/newBg.jpg"), // Background image
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.6), // Adjust opacity as needed
+              BlendMode.darken,
+            ),
+          ),
+        ),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.only(bottom: 40),
+                child: Image.asset('assets/newIcon.png', width: 250), // Display the icon
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.fromLTRB(25, 15, 25, 15),
+                  backgroundColor: Color.fromRGBO(255, 224, 70, 1), // Button color
+                ),
+                child: Text(
+                  'Revive someone today',
+                  textScaleFactor: 1.25 * MediaQuery.of(context).textScaleFactor, // Adjust text scaling
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontFamily: 'Avenir-Heavy',
+                  ),
+                ),
+                onPressed: () => _onIntroEnd(context), // Navigate to MainPage
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// MainPage remains unchanged
 class MainPage extends StatefulWidget {
   @override
   _MainPageState createState() => _MainPageState();
@@ -40,10 +97,7 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-
   }
-
-
 
   @override
   void dispose() {
@@ -54,21 +108,35 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     bool isLargeScreen = MediaQuery.of(context).size.width > 600;
-    return Scaffold(
-      backgroundColor: Color.fromARGB(255, 56, 56, 56),
-      body: Row(
-        children: [
-          if (isLargeScreen) buildNavigationRail(),
-          Expanded(
-            child: PageView(
-              controller: _pageController,
-              physics: const NeverScrollableScrollPhysics(),
-              children: pages,
-            ),
+    return Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/newBg.jpg"),
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(
+            Colors.black.withOpacity(0.7),  // Adjust opacity as needed
+            BlendMode.darken,
           ),
-        ],
+        ),
       ),
-      bottomNavigationBar: isLargeScreen ? null : buildBottomBar(),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Row(
+          children: [
+            if (isLargeScreen) buildNavigationRail(),
+            Expanded(
+              child: Container(
+                child: PageView(
+                  controller: _pageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: pages,
+                ),
+              ),
+            ),
+          ],
+        ),
+        bottomNavigationBar: isLargeScreen ? null : buildBottomBar(),
+      ),
     );
   }
 
@@ -101,7 +169,7 @@ class _MainPageState extends State<MainPage> {
 
   NavigationRail buildNavigationRail() {
     return NavigationRail(
-      backgroundColor: Color.fromARGB(175, 27, 27, 27),
+      backgroundColor: Colors.transparent,
       selectedIndex: _controller.index,
       useIndicator: true,
       indicatorColor: Color.fromARGB(175, 27, 27, 27),
@@ -140,5 +208,4 @@ class _MainPageState extends State<MainPage> {
       ],
     );
   }
-
 }

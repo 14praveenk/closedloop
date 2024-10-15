@@ -171,306 +171,282 @@ class _Page2NEWState extends State<Page2NEW> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height;
-// Set the maximum width for the container to 500 if screenWidth > 500, otherwise use screenWidth
-    final double maxWidth = screenWidth > 500 ? 500 : screenWidth;
-    final double logoHeight = screenWidth < 500 ? 80 : 160;
-    return Scaffold(
-      backgroundColor: Color.fromARGB(175, 27, 27, 27),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Container(
-            // Set the maximum width to 50% of the screen width and center it
-            width: maxWidth,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  child: SvgPicture.asset(
-                    'assets/newLogo.svg',
-                    height: logoHeight, // Adjust the height according to your needs
-                    fit: BoxFit.contain,
-                  ),
+@override
+Widget build(BuildContext context) {
+  final double screenWidth = MediaQuery.of(context).size.width;
+  final double screenHeight = MediaQuery.of(context).size.height;
+  var padding = MediaQuery.paddingOf(context);
+double newheight = screenHeight - padding.top - padding.bottom;
+  final double maxWidth = screenWidth > 700 ? 700 : screenWidth;
+  final double logoHeight = screenWidth < 500 ? 60 : 90;
+
+  return Scaffold(
+    backgroundColor: Colors.transparent,
+    body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints viewportConstraints) {
+          return SingleChildScrollView(
+      child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: viewportConstraints.maxHeight,
+              ),
+              child: IntrinsicHeight(
+                child: Column(
+                  children: <Widget>[Expanded(child:
+Center(
+        child: Container(
+          width: screenWidth,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(0, 30, 0, 20),
+                child: Image.asset(
+                  'assets/newIcon.png',
+                  height: logoHeight,
+                  fit: BoxFit.contain,
                 ),
-                Container(
-                  margin: EdgeInsets.only(left: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(children: [
-                        Container(
-                          margin: EdgeInsets.only(right: 20),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color.fromRGBO(
-                                255, 215, 0, 1), // Change color as needed
-                          ),
-                          child: Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(
-                                  8 * ScaleSize.textScaleFactor(context)),
-                              child: Text(
-                                '1',
-                                textScaler: TextScaler.linear(
-                                    1.5 * ScaleSize.textScaleFactor(context)),
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'Avenir',
-                                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(children: [
+                      Container(
+                        margin: EdgeInsets.only(right: 20),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color.fromRGBO(255, 215, 0, 1),
+                        ),
+                        child: Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(8 * ScaleSize.textScaleFactor(context)),
+                            child: Text(
+                              '1',
+                              textScaler: TextScaler.linear(1.5 * ScaleSize.textScaleFactor(context)),
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'Avenir',
                               ),
                             ),
                           ),
                         ),
-                        Text(
-                          'Call 999',
-                          textScaler: TextScaler.linear(
-                              1.5 * ScaleSize.textScaleFactor(context)),
+                      ),
+                      Text(
+                        'Call 999',
+                        textScaler: TextScaler.linear(1.5 * ScaleSize.textScaleFactor(context)),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Avenir',
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ]),
+                    Container(
+                      margin: EdgeInsets.only(left: 13 * ScaleSize.textScaleFactor(context)),
+                      width: 2,
+                      height: 60,
+                      color: Color.fromRGBO(255, 215, 0, 1),
+                    ),
+                    Row(children: [
+                      Container(
+                        margin: EdgeInsets.only(right: 20),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color.fromRGBO(255, 215, 0, 1),
+                        ),
+                        child: Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(8 * ScaleSize.textScaleFactor(context)),
+                            child: Text(
+                              '2',
+                              textScaler: TextScaler.linear(1.5 * ScaleSize.textScaleFactor(context)),
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'Avenir',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        child: Text(
+                          'Is the patient breathing normally?',
+                          softWrap: true,
+                          textScaler: TextScaler.linear(1.5 * ScaleSize.textScaleFactor(context)),
                           style: TextStyle(
                             color: Colors.white,
                             fontFamily: 'Avenir',
                           ),
-                          textAlign: TextAlign.center,
                         ),
-                      ]),
-                      Container(
-                        margin: EdgeInsets.only(
-                            left: 13 * ScaleSize.textScaleFactor(context)),
-                        width: 2,
-                        height: 60,
-                        color: Color.fromRGBO(
-                            255, 215, 0, 1), // Progress bar color
                       ),
-                      Row(children: [
+                    ]),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Container(
-                          margin: EdgeInsets.only(right: 20),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Color.fromRGBO(
-                                255, 215, 0, 1), // Change color as needed
-                          ),
-                          child: Center(
-                            child: Padding(
-                              padding: EdgeInsets.all(
-                                  8 * ScaleSize.textScaleFactor(context)),
-                              child: Text(
-                                '2',
-                                textScaler: TextScaler.linear(
-                                    1.5 * ScaleSize.textScaleFactor(context)),
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'Avenir',
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Flexible(
-                          child: Text(
-                            'Is the patient breathing normally?',
-                            softWrap: true,
-                            textScaler: TextScaler.linear(
-                                1.5 * ScaleSize.textScaleFactor(context)),
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Avenir',
-                            ),
-                          ),
-                        ),
-                      ]),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(
-                                left: 35 * ScaleSize.textScaleFactor(context),
-                                top: 20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: colorButton1,
-                                          padding: EdgeInsets.all(15),
-                                        ),
-                                        onPressed: () {
-                                          _handleBreathingQuestion(
-                                              true); // Breathing
-                                        },
-                                        child: Text(
-                                          'Yes',
-                                          textScaler: TextScaler.linear(1.5 *
-                                              ScaleSize.textScaleFactor(
-                                                  context)),
-                                          style: TextStyle(
-                                            fontFamily: 'Avenir-Heavy',
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: colorButton2,
-                                          padding: EdgeInsets.all(15),
-                                        ),
-                                        onPressed: () {
-                                          _handleBreathingQuestion(
-                                              false); // Not Breathing
-                                        },
-                                        child: Text(
-                                          'No',
-                                          textScaler: TextScaler.linear(1.5 *
-                                              ScaleSize.textScaleFactor(
-                                                  context)),
-                                          style: TextStyle(
-                                            fontFamily: 'Avenir-Heavy',
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 20),
-                                // Video selection logic...
-                                if (selectedVideoId != 0) ...[
+                          margin: EdgeInsets.only(left: 35 * ScaleSize.textScaleFactor(context), top: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
                                   Container(
-                                    color: Color.fromARGB(175, 27, 27, 27),
-                                    height: 150 *
-                                        ScaleSize.textScaleFactor(context),
-                                    child: AspectRatio(
-                                      aspectRatio: 16 / 9,
-                                      child: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          ClipRRect(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(10)),
-                                            child: Stack(
-                                              children: <Widget>[
-                                                Image.asset(
-                                                  videoData[selectedVideoId]
-                                                      ['thumbnail']!,
-                                                  height: double.infinity,
-                                                  width: double.infinity,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Positioned(
-                                            bottom: 20,
-                                            left: 16,
-                                            right: 16,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                const SizedBox(height: 10),
-                                                ElevatedButton(
-                                                  onPressed: () => _playVideo(
-                                                    context,
-                                                    videoData[selectedVideoId]
-                                                        ['id']!,
-                                                    videoData[selectedVideoId]
-                                                        ['video']!,
-                                                  ),
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    shape: const CircleBorder(),
-                                                    backgroundColor: Colors
-                                                        .black
-                                                        .withOpacity(0.01),
-                                                  ),
-                                                  child: const Icon(
-                                                      Icons.play_arrow,
-                                                      size: 35,
-                                                      color: Colors.white),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
+                                    margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: colorButton1,
+                                        padding: EdgeInsets.all(15),
+                                      ),
+                                      onPressed: () {
+                                        _handleBreathingQuestion(true); // Breathing
+                                      },
+                                      child: Text(
+                                        'Yes',
+                                        textScaler: TextScaler.linear(1.5 * ScaleSize.textScaleFactor(context)),
+                                        style: TextStyle(
+                                          fontFamily: 'Avenir-Heavy',
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: colorButton2,
+                                        padding: EdgeInsets.all(15),
+                                      ),
+                                      onPressed: () {
+                                        _handleBreathingQuestion(false); // Not Breathing
+                                      },
+                                      child: Text(
+                                        'No',
+                                        textScaler: TextScaler.linear(1.5 * ScaleSize.textScaleFactor(context)),
+                                        style: TextStyle(
+                                          fontFamily: 'Avenir-Heavy',
+                                          color: Colors.black,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ],
+                              ),
+                              SizedBox(height: 20),
+                              if (selectedVideoId != 0) ...[
+                                Container(
+                                  color: Color.fromARGB(175, 27, 27, 27),
+                                  height: 150 * ScaleSize.textScaleFactor(context),
+                                  child: AspectRatio(
+                                    aspectRatio: 16 / 9,
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                          child: Stack(
+                                            children: <Widget>[
+                                              Image.asset(
+                                                videoData[selectedVideoId]['thumbnail']!,
+                                                height: double.infinity,
+                                                width: double.infinity,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Positioned(
+                                          bottom: 20,
+                                          left: 16,
+                                          right: 16,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              const SizedBox(height: 10),
+                                              ElevatedButton(
+                                                onPressed: () => _playVideo(
+                                                  context,
+                                                  videoData[selectedVideoId]['id']!,
+                                                  videoData[selectedVideoId]['video']!,
+                                                ),
+                                                style: ElevatedButton.styleFrom(
+                                                  shape: const CircleBorder(),
+                                                  backgroundColor: Colors.black.withOpacity(0.01),
+                                                ),
+                                                child: const Icon(Icons.play_arrow, size: 35, color: Colors.white),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ],
-                            ),
+                            ],
                           ),
-                        ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Spacer(), // Pushes the offline section to the bottom
+              if (!videosDownloaded) ...[
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                  child: Column(
+                    children: [
+                      TextButton(
+                        child: const Text(
+                          textAlign: TextAlign.center,
+                          'Videos not yet available offline. Tap here to download',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: "Avenir",
+                            fontSize: 16,
+                          ),
+                        ),
+                        onPressed: downloadAllVideos,
                       ),
                     ],
                   ),
-                ),
-                // This part handles the offline video availability message
-                if (!videosDownloaded) ...[
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                    child: Column(
-                      children: [
-                        TextButton(
-                          child: const Text(
-                            textAlign: TextAlign.center,
-                            'Videos not yet available offline. Tap here to download',
+                )
+              ] else ...[
+                Container(
+                  margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            'All videos available offline  ',
                             style: TextStyle(
                               color: Colors.white,
                               fontFamily: "Avenir",
                               fontSize: 16,
                             ),
                           ),
-                          onPressed: downloadAllVideos,
-                        ),
-                      ],
-                    ),
-                  )
-                ] else ...[
-                  Container(
-                    margin: EdgeInsets.fromLTRB(0, 0, 0, 20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              'All videos available offline  ',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: "Avenir",
-                                fontSize: 16,
-                              ),
-                            ),
-                            Icon(Icons.cloud_download_outlined,
-                                color: Colors.white),
-                          ],
-                        ),
-                      ],
-                    ),
+                          Icon(Icons.cloud_download_outlined, color: Colors.white),
+                        ],
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ],
-            ),
+            ],
           ),
         ),
-      ),
-    );
-  }
+      ),)]))));}
+    ),
+  );
+}
+
 
   // Helper function to determine how many columns to show based on screen width
   int _getCrossAxisCount(BuildContext context) {

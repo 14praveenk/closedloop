@@ -158,42 +158,76 @@ class _Page3NEWState extends State<Page3NEW> {
     );
   }
 
- @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color.fromARGB(175, 27, 27, 27),
-      body: SingleChildScrollView(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: _getMaxWidth(context)),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  // Responsive Grid Layout for Videos
-                  GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: _getCrossAxisCount(context),
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                      childAspectRatio: 16 / 9,
-                    ),
-                    itemCount: videoData.length,
-                    itemBuilder: (context, index) {
-                      return _buildVideoCard(videoData[index]);
-                    },
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: Colors.transparent,
+    body: Center(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: _getMaxWidth(context)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              // Wrap the GridView with Expanded to give it flexible space
+              Expanded(
+                child: GridView.builder(
+                  shrinkWrap: true,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: _getCrossAxisCount(context),
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    childAspectRatio: 16 / 9,
                   ),
-                ],
+                  itemCount: videoData.length,
+                  itemBuilder: (context, index) {
+                    return _buildVideoCard(videoData[index]);
+                  },
+                ),
               ),
-            ),
+              const SizedBox(height: 20),
+
+              // Download section
+              if (!videosDownloaded) ...[
+                const Text(
+                  'Videos not yet available offline.',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontVariations: [FontVariation('wght', (400))],
+                      fontFamily: "NunitoSans",
+                      fontSize: 16),
+                ),
+                const SizedBox(height: 10),
+                ElevatedButton(
+                  onPressed: downloadAllVideos,
+                  child: const Text('Download All Videos',
+                      style: TextStyle(
+                        fontFamily: "NunitoSans",
+                        fontVariations: [FontVariation('wght', (400))],
+                      )),
+                ),
+              ] else ...[
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('All videos available offline  ',
+                        style: (TextStyle(
+                          color: Colors.white,
+                          fontVariations: [FontVariation('wght', (400))],
+                          fontFamily: "NunitoSans",
+                        ))),
+                    Icon(Icons.cloud_download_outlined,
+                        color: Colors.white),
+                  ],
+                ),
+              ],
+            ],
           ),
         ),
       ),
-    );
-  }
-
+    ),
+  );
+}
 
   // Helper function to determine how many columns to show based on screen width
   int _getCrossAxisCount(BuildContext context) {
