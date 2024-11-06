@@ -35,28 +35,28 @@ class _Page2NEWState extends State<Page2NEW> {
   Color colorButton2 = Color.fromARGB(255, 255, 217, 0);
 
   final List<Map<String, String>> videoData = [
-    {
+        {
       'id': 'video1',
       'title': 'THE PATIENT IS NOT BREATHING',
-      'thumbnail': 'assets/drabcThumb.jpg',
+      'thumbnail': 'assets/thumbnails/no.png',
       'video': kIsWeb
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746671/closedloop/newVids/Drabccardiac_xblixv.mp4'
+          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1730876411/finalRevive/No_Breathing_-_Dr_Abc_Cpr_Aed_dfpfaj.mp4'
           : 'assets/videos/drabccardiac.mp4', // Use asset path for Android
     },
     {
-      'id': 'video2',
-      'title': 'HOW TO CPR',
-      'thumbnail': 'assets/cprThumb.jpg',
+      'id': 'video1',
+      'title': 'THE PATIENT IS NOT BREATHING',
+      'thumbnail': 'assets/thumbnails/no.png',
       'video': kIsWeb
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746671/closedloop/newVids/Cpr_qwmmm4.mp4'
-          : 'assets/videos/cpr.mp4', // Use asset path for Android
+          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1730876411/finalRevive/No_Breathing_-_Dr_Abc_Cpr_Aed_dfpfaj.mp4'
+          : 'assets/videos/drabccardiac.mp4', // Use asset path for Android
     },
     {
       'id': 'video3',
       'title': 'THE PATIENT IS BREATHING',
-      'thumbnail': 'assets/assessThumb.jpg',
+      'thumbnail': 'assets/thumbnails/yes.png',
       'video': kIsWeb
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746672/closedloop/newVids/Patientbreathing_sbaeu9.mp4'
+          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1730876398/finalRevive/Yes_Breathing_-_Abc_Recovery_Position_kdcuyx.mp4'
           : 'assets/videos/patientbreathing.mp4', // Use asset path for Android
     },
   ];
@@ -216,7 +216,7 @@ Center(
                         margin: EdgeInsets.only(right: 20),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Color.fromRGBO(255, 215, 0, 1),
+                          color: Color.fromRGBO(255, 255, 255, 1),
                         ),
                         child: Center(
                           child: Padding(
@@ -253,7 +253,7 @@ Center(
                         margin: EdgeInsets.only(right: 20),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Color.fromRGBO(255, 215, 0, 1),
+                          color: Color.fromRGBO(255, 255, 255, 1),
                         ),
                         child: Center(
                           child: Padding(
@@ -356,7 +356,7 @@ Center(
                                           ),
                                         ),
                                         Positioned(
-                                          bottom: 20,
+                                          
                                           left: 16,
                                           right: 16,
                                           child: Column(
@@ -374,7 +374,7 @@ Center(
                                                   shape: const CircleBorder(),
                                                   backgroundColor: Colors.black.withOpacity(0.01),
                                                 ),
-                                                child: const Icon(Icons.play_arrow, size: 35, color: Colors.white),
+                                                child: const Icon(Icons.play_arrow, size: 55, color: Colors.white),
                                               ),
                                             ],
                                           ),

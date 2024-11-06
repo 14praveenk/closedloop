@@ -23,33 +23,40 @@ class _Page3NEWState extends State<Page3NEW> {
     {
       'id': 'video1',
       'title': 'LEADING A CARDIAC EMERGENCY',
-      'thumbnail': 'assets/cardiacEmergencyThumb.jpg',
+      'thumbnail': 'assets/thumbnails/closedloop.jpg',
       'video': kIsWeb 
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1728763566/closedloop/newVids/closedloopcomms_zfsyww.mp4'
+          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1730876403/finalRevive/5._Closed_Loop_Communication_spko1a.mp4'
           : 'assets/videos/closedloopcomms.mp4'},
     {
       'id': 'video2',
       'title': 'DR ABC Assessment',
-      'thumbnail': 'assets/assessThumb.jpg',
+      'thumbnail': 'assets/thumbnails/breathingAssess.jpg',
       'video': kIsWeb
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746672/closedloop/newVids/Patientbreathing_sbaeu9.mp4'
+          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1730876405/finalRevive/1._Assessing_A_Breathing_Person_dxcxit.mp4'
           : 'assets/patientbreathing.mp4'},
         {
       'id': 'video3',
       'title': 'DR ABC Assessment',
-      'thumbnail': 'assets/drabcThumb.jpg',
+      'thumbnail': 'assets/thumbnails/drabc.jpg',
       'video': kIsWeb
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746671/closedloop/newVids/Drabccardiac_xblixv.mp4'
+          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1730876395/finalRevive/2._Dr_Abc_Cardiac_Arrest_f4x53u.mp4'
           : 'assets/drabccardiac.mp4',
     },
         {
       'id': 'video4',
       'title': 'HOW TO CPR',
-      'thumbnail': 'assets/cprThumb.jpg',
+      'thumbnail': 'assets/thumbnails/cpr.jpg',
       'video': kIsWeb
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746671/closedloop/newVids/Cpr_qwmmm4.mp4'
+          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1730876390/finalRevive/3._How_To_Do_Cpr_rwgjzg.mp4'
           : 'assets/cpr.mp4',   
     },
+        {
+      'id': 'video5',
+      'title': 'HOW TO USE A DEFIB',
+      'thumbnail': 'assets/thumbnails/defib.jpg',
+      'video': kIsWeb 
+          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1730876400/finalRevive/4._How_To_Use_A_Defibrillator_nouf78.mp4'
+          : 'assets/videos/closedloopcomms.mp4'},
 
   ];
 
