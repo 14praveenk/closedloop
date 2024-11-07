@@ -58,6 +58,9 @@ class _Page2NEWState extends State<Page2NEW> {
   void initState() {
     super.initState();
     if (kIsWeb) {
+      const isRunningWithWasm = bool.fromEnvironment('dart.tool.dart2wasm');
+
+      print(isRunningWithWasm);
       _checkIfVideosDownloaded(); // Only check for offline availability on the web
     }
   }
