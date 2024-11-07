@@ -11,7 +11,6 @@ import 'dart:typed_data';
 import 'package:video_player/video_player.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:chewie/chewie.dart';
 import 'package:universal_html/html.dart' as html;
 import 'package:idb_shim/idb.dart';

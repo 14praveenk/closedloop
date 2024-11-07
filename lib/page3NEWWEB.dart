@@ -1,4 +1,4 @@
-import 'dart:html';
+import 'package:universal_html/html.dart' as html;
 import 'dart:io' as io;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -366,8 +366,8 @@ Widget build(BuildContext context) {
       if (rawResult != null) {
         final result = rawResult as Map<String, dynamic>;
         final Uint8List data = result['data'] as Uint8List;
-        final blob = Blob([data], 'video/mp4');
-        final url = Url.createObjectUrl(blob);
+        final blob = html.Blob([data], 'video/mp4');
+        final url = html.Url.createObjectUrl(blob);
         return url; // Local blob URL for playback
       }
     }

@@ -41,7 +41,6 @@ dependencies:
   video_player: ^2.9.2
   path_provider: ^2.0.8
   dio: ^5.0.0
-  permission_handler: ^11.3.1
   chewie: ^1.8.5
   universal_html: ^2.2.4
   idb_shim: ^2.4.1+1
@@ -49,7 +48,6 @@ dependencies:
   flutter_svg: ^1.0.3
   flutter_launcher_icons: ^0.14.1
   shared_preferences: ^2.2.3
-  introduction_screen: ^3.1.14
 dev_dependencies:
   flutter_test:
     sdk: flutter
