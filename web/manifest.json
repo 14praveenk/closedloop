@@ -1,11 +1,11 @@
 {
-    "name": "closedloop",
-    "short_name": "closedloop",
+    "name": "REVIVE",
+    "short_name": "REVIVE",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Learn life-saving skills today.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
@@ -31,5 +31,19 @@
             "type": "image/png",
             "purpose": "maskable"
         }
+    ],
+    "screenshots": [
+        {
+         "src": "icons/screenshot1.png",
+          "sizes": "1170x2532",
+          "type": "image/png",
+          "label": "Guide"
+        },
+        {
+            "src": "icons/screenshot2.png",
+             "sizes": "1170x2532",
+             "type": "image/png",
+             "label": "Videos"
+           }
     ]
 }
