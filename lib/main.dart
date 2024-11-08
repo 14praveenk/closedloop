@@ -2,6 +2,7 @@ import 'dart:io'; // Import this for Platform
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'page1.dart';
+import 'package:pwa_install/pwa_install.dart';
 
 import 'page2NEWMOB.dart' // Stub implementation
     if (dart.library.io) 'page2NEWMOB.dart' // dart:io implementation
@@ -14,7 +15,11 @@ import 'page3NEWMOB.dart' // Stub implementation
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 import 'package:cuberto_bottom_bar/cuberto_bottom_bar.dart';
 
-void main() => runApp(MyApp());
+Future<void> main() async { PWAInstall().setup(installCallback: () {
+    debugPrint('APP INSTALLED!');
+  });
+  
+  runApp(MyApp());}
 
 class MyApp extends StatelessWidget {
   @override

@@ -17,14 +17,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.3"
-  appinio_video_player:
-    dependency: "direct main"
-    description:
-      name: appinio_video_player
-      sha256: f39a7fdebda31f72970a79a4263ceb049f2958dba9e87403235fec32d5a3ff58
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.2.2"
   archive:
     dependency: transitive
     description:
@@ -209,14 +201,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.0"
-  flick_video_player:
-    dependency: "direct main"
-    description:
-      name: flick_video_player
-      sha256: f011cc28c6e4932485ac3a9d09ccacd25d9d430c99090480ccad2f5ebca9366e
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.9.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -305,13 +289,13 @@ packages:
     source: hosted
     version: "4.2.0"
   js:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: js
-      sha256: c1b2e9b5ea78c45e1a0788d29606ba27dc5f71f019f32ca5140f61ef071838cf
+      sha256: f2c445dce49627136094980615a031419f7f3eb393237e4ecd97ac15dea343f3
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.1"
+    version: "0.6.7"
   json_annotation:
     dependency: transitive
     description:
@@ -504,6 +488,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.2"
+  pwa_install:
+    dependency: "direct main"
+    description:
+      name: pwa_install
+      sha256: "79a6c38e67db12da98489258ead7e025ce4860c9010cde226d0b53ad6d403fd9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.5"
   sembast:
     dependency: transitive
     description:
