@@ -384,13 +384,13 @@ Widget build(BuildContext context) {
     );
   }
 
-void _playVideo(BuildContext context, String videoId, String videoUrl) {
+void _playVideo(BuildContext context, String videoId, String videoUrl) async {
   // Check if a previous video is still playing and dispose of it
   _videoPlayerController?.dispose();
   _chewieController?.dispose();
 
   // Use asset video URL for Android or network URL for web
-  String localVideoUrl = kIsWeb ? videoUrl : videoUrl;
+ String localVideoUrl = await loadVideo(videoId, videoUrl);
 
   // Create a new VideoPlayerController
   _videoPlayerController = VideoPlayerController.network(localVideoUrl);
