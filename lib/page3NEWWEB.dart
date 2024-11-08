@@ -9,6 +9,7 @@ import 'package:chewie/chewie.dart';
 import 'package:dio/dio.dart';
 import 'package:idb_shim/idb_browser.dart';
 import 'package:idb_shim/idb.dart';
+import 'package:flutter/foundation.dart';
 
 class Page3NEW extends StatefulWidget {
   @override
@@ -120,6 +121,10 @@ Future<void> _checkIfVideosDownloaded() async {
 
     for (var i=0;i<videoData.length;i++) {
       var video = videoData[i];
+
+          if (kIsWeb && !kDebugMode) {
+      video['video'] = video['video']!.replaceFirst('/assets/', '');
+    }
       try {
         // Download video
                 final response = await Dio().get<List<int>>(
@@ -456,7 +461,10 @@ Widget build(BuildContext context) {
   }
       }
     }
-
+    if (kIsWeb && !kDebugMode) {
+    // Modify the path by removing one "/assets/" occurrence
+    videoUrl = videoUrl.replaceFirst('/assets/', '');
+  }
     return videoUrl; // Fallback to the original network URL if not downloaded
   }
   @override

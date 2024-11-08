@@ -109,6 +109,12 @@ class _Page2NEWState extends State<Page2NEW> {
 
     for (var i = 0; i < videoData.length; i++) {
       var video = videoData[i];
+
+          // Modify the path if on web and not in debug mode
+    if (kIsWeb && !kDebugMode) {
+      video['video'] = video['video']!.replaceFirst('/assets/', '');
+    }
+    
       try {
         final response = await Dio().get<List<int>>(
           video['video']!,
@@ -661,7 +667,11 @@ class _Page2NEWState extends State<Page2NEW> {
       }
     }
 
-    return videoUrl; // Fallback to the original network URL if not downloaded
+    if (kIsWeb && !kDebugMode) {
+    // Modify the path by removing one "/assets/" occurrence
+    videoUrl = videoUrl.replaceFirst('/assets/', '');
+  }
+  return videoUrl;
   }
 
   @override
