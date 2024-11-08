@@ -1,8 +1,9 @@
 import 'dart:io' as io show Platform;
+import 'dart:js_interop';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:universal_html/html.dart' as html;
+import 'package:web/web.dart' as html;
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 import 'package:dio/dio.dart';
@@ -41,26 +42,24 @@ class _Page2NEWState extends State<Page2NEW> {
       'title': 'THE PATIENT IS NOT BREATHING',
       'thumbnail': 'assets/thumbnails/no.png',
       'video': kIsWeb
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1730876411/finalRevive/No_Breathing_-_Dr_Abc_Cpr_Aed_dfpfaj.mp4'
-          : 'assets/videos/drabccardiac.mp4', // Use asset path for Android
+          ? 'assets/newVideos/no.mp4'
+          : 'assets/newVideos/no.mp4', // Use asset path for Android
     },
     {
       'id': 'video3',
       'title': 'THE PATIENT IS BREATHING',
       'thumbnail': 'assets/thumbnails/yes.png',
       'video': kIsWeb
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1730876398/finalRevive/Yes_Breathing_-_Abc_Recovery_Position_kdcuyx.mp4'
-          : 'assets/videos/patientbreathing.mp4', // Use asset path for Android
+          ? 'assets/newVideos/yes.mp4'
+          : 'assets/newVideos/yes.mp4', // Use asset path for Android
     },
   ];
 
   @override
   void initState() {
     super.initState();
-    if (kIsWeb) {
-      const isRunningWithWasm = bool.fromEnvironment('dart.tool.dart2wasm');
 
-      print(isRunningWithWasm);
+    if (kIsWeb) {
       _checkIfVideosDownloaded(); // Only check for offline availability on the web
     }
   }
@@ -68,7 +67,7 @@ class _Page2NEWState extends State<Page2NEW> {
   Future<void> _checkIfVideosDownloaded() async {
     if (!kIsWeb) return;
     final dbFactory = getIdbFactory();
-    final db = await dbFactory!.open('myVideosDB', version: 1,
+    final db = await dbFactory!.open('p2VideosDBv1', version: 1,
         onUpgradeNeeded: (VersionChangeEvent event) {
       final db = event.database;
       db.createObjectStore('videos', keyPath: 'id');
@@ -98,7 +97,7 @@ class _Page2NEWState extends State<Page2NEW> {
     if (!kIsWeb) return;
 
     final dbFactory = getIdbFactory();
-    final db = await dbFactory!.open('myVideosDB', version: 1,
+    final db = await dbFactory!.open('p2VideosDBv1', version: 1,
         onUpgradeNeeded: (VersionChangeEvent event) {
       final db = event.database;
       if (!db.objectStoreNames.contains('videos')) {
@@ -627,7 +626,7 @@ class _Page2NEWState extends State<Page2NEW> {
     } else if (kIsWeb) {
       // For web, check if the video is downloaded in IndexedDB
       final dbFactory = getIdbFactory();
-      final db = await dbFactory!.open('myVideosDB', version: 1,
+      final db = await dbFactory!.open('p2VideosDBv1', version: 1,
           onUpgradeNeeded: (VersionChangeEvent event) {
         final db = event.database;
         db.createObjectStore('videos', keyPath: 'id');
@@ -641,9 +640,24 @@ class _Page2NEWState extends State<Page2NEW> {
       if (rawResult != null) {
         final result = rawResult as Map<String, dynamic>;
         final Uint8List data = result['data'] as Uint8List;
-        final blob = html.Blob([data], 'video/mp4');
-        final url = html.Url.createObjectUrl(blob);
-        return url; // Local blob URL for playback
+ if (data != null) {
+    // Convert Uint8List to JSUint8Array
+    final jsUint8Array = data.toJS;
+
+    // Create a JSArray<JSUint8Array> containing the jsUint8Array
+    final jsArray = [jsUint8Array].toJS;
+
+    // Create a BlobPropertyBag with the desired MIME type
+    final blobPropertyBag = html.BlobPropertyBag(type: 'video/mp4');
+
+    // Create the Blob using the JSArray and BlobPropertyBag
+    final blob = html.Blob(jsArray, blobPropertyBag);
+
+    // Generate a URL for the Blob
+    final url = html.URL.createObjectURL(blob);
+
+    return url;
+  }
       }
     }
 

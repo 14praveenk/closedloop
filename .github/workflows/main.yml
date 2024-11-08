@@ -13,4 +13,4 @@ jobs:
       - uses: subosito/flutter-action@v1
       - uses: pravsterrr/flutter-gh-pages@v1
         with:
-          customArgs: --pwa-strategy=offline-first --wasm
+          customArgs: --pwa-strategy=offline-first --web-renderer canvaskit

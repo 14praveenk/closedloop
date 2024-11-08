@@ -40,14 +40,18 @@ dependencies:
   animated_notch_bottom_bar: ^1.0.0
   video_player: ^2.9.2
   path_provider: ^2.0.8
-  dio: ^5.0.0
+  dio: ^5.6.0
   chewie: ^1.8.5
   universal_html: ^2.2.4
-  idb_shim: ^2.4.1+1
+  idb_shim: ^2.6.1+7
   cuberto_bottom_bar: ^3.1.0
   flutter_svg: ^1.0.3
   flutter_launcher_icons: ^0.14.1
   shared_preferences: ^2.2.3
+  flick_video_player: ^0.9.0
+  js: ^0.7.1
+  appinio_video_player: ^1.2.2
+  web: ^1.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -73,6 +77,7 @@ flutter:
     - assets/
     - assets/videos/
     - assets/thumbnails/
+    - assets/newVideos/
   fonts:
     - family: Inter
       fonts:

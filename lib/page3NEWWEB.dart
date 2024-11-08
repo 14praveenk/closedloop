@@ -1,4 +1,5 @@
-import 'package:universal_html/html.dart' as html;
+import 'dart:js_interop';
+import 'package:web/web.dart' as html;
 import 'dart:io' as io;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -17,7 +18,9 @@ class Page3NEW extends StatefulWidget {
 class _Page3NEWState extends State<Page3NEW> {
   VideoPlayerController? _videoPlayerController;
   ChewieController? _chewieController;
-  bool videosDownloaded = false;
+  bool? videosDownloaded;
+    bool isLoading = true; // Add loading flag
+  double downloadProgress = 0.0; // New variable for download progress
 
   final List<Map<String, String>> videoData = [
     {
@@ -25,38 +28,45 @@ class _Page3NEWState extends State<Page3NEW> {
       'title': 'LEADING A CARDIAC EMERGENCY',
       'thumbnail': 'assets/thumbnails/closedloop.jpg',
       'video': kIsWeb 
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1730876403/finalRevive/5._Closed_Loop_Communication_spko1a.mp4'
-          : 'assets/videos/closedloopcomms.mp4'},
+          ? 'assets/newVideos/5clc.mp4'
+          : 'assets/newVideos/5clc.mp4'},
     {
       'id': 'video2',
       'title': 'DR ABC Assessment',
       'thumbnail': 'assets/thumbnails/breathingAssess.jpg',
       'video': kIsWeb
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1730876405/finalRevive/1._Assessing_A_Breathing_Person_dxcxit.mp4'
-          : 'assets/patientbreathing.mp4'},
+          ? 'assets/newVideos/1assessBreathing.mp4'
+          : 'assets/newVideos/1assessBreathing.mp4'},
         {
       'id': 'video3',
       'title': 'DR ABC Assessment',
       'thumbnail': 'assets/thumbnails/drabc.jpg',
       'video': kIsWeb
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1730876395/finalRevive/2._Dr_Abc_Cardiac_Arrest_f4x53u.mp4'
-          : 'assets/drabccardiac.mp4',
+          ? 'assets/newVideos/2drabccardiac.mp4'
+          : 'assets/newVideos/2drabccardiac.mp4',
     },
         {
       'id': 'video4',
       'title': 'HOW TO CPR',
       'thumbnail': 'assets/thumbnails/cpr.jpg',
       'video': kIsWeb
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1730876390/finalRevive/3._How_To_Do_Cpr_rwgjzg.mp4'
-          : 'assets/cpr.mp4',   
+          ? 'assets/newVideos/3cpr.mp4'
+          : 'assets/newVideos/3cpr.mp4',   
     },
         {
       'id': 'video5',
       'title': 'HOW TO USE A DEFIB',
       'thumbnail': 'assets/thumbnails/defib.jpg',
       'video': kIsWeb 
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1730876400/finalRevive/4._How_To_Use_A_Defibrillator_nouf78.mp4'
-          : 'assets/videos/closedloopcomms.mp4'},
+          ? 'assets/newVideos/4defib.mp4'
+          : 'assets/newVideos/4defib.mp4'},
+           {
+      'id': 'video6',
+      'title': 'HOW TO DO RECOVERY POSITION',
+      'thumbnail': 'assets/thumbnails/recovery.jpg',
+      'video': kIsWeb 
+          ? 'assets/newVideos/6recovpos.mp4'
+          : 'assets/newVideos/6recovpos.mp4'},
 
   ];
 
@@ -66,9 +76,10 @@ class _Page3NEWState extends State<Page3NEW> {
     _checkIfVideosDownloaded();
   }
 
-  Future<void> _checkIfVideosDownloaded() async {
+Future<void> _checkIfVideosDownloaded() async {
+    if (!kIsWeb) return;
     final dbFactory = getIdbFactory();
-    final db = await dbFactory!.open('myVideos2DB', version: 1,
+    final db = await dbFactory!.open('p3VideosDBv1', version: 1,
         onUpgradeNeeded: (VersionChangeEvent event) {
       final db = event.database;
       db.createObjectStore('videos', keyPath: 'id');
@@ -77,7 +88,6 @@ class _Page3NEWState extends State<Page3NEW> {
     final transaction = db.transaction('videos', idbModeReadOnly);
     final store = transaction.objectStore('videos');
 
-    // Check if all videos are downloaded
     bool allDownloaded = true;
     for (var video in videoData) {
       final result = await store.getObject(video['id']!);
@@ -89,6 +99,7 @@ class _Page3NEWState extends State<Page3NEW> {
 
     setState(() {
       videosDownloaded = allDownloaded;
+      isLoading = false;
     });
 
     db.close();
@@ -96,7 +107,7 @@ class _Page3NEWState extends State<Page3NEW> {
 
   Future<void> downloadAllVideos() async {
     final dbFactory = getIdbFactory();
-    final db = await dbFactory!.open('myVideos2DB', version: 1,
+    final db = await dbFactory!.open('p3VideosDBv1', version: 1,
         onUpgradeNeeded: (VersionChangeEvent event) {
       final db = event.database;
       if (!db.objectStoreNames.contains('videos')) {
@@ -107,11 +118,22 @@ class _Page3NEWState extends State<Page3NEW> {
     // Download all videos outside the IndexedDB transaction
     List<Map<String, dynamic>> downloadedVideos = [];
 
-    for (var video in videoData) {
+    for (var i=0;i<videoData.length;i++) {
+      var video = videoData[i];
       try {
         // Download video
-        final response = await Dio().get<List<int>>(video['video']!,
-            options: Options(responseType: ResponseType.bytes));
+                final response = await Dio().get<List<int>>(
+          video['video']!,
+          onReceiveProgress: (received, total) {
+            if (total != -1) {
+              setState(() {
+                downloadProgress = (received / total) / videoData.length +
+                    (i / videoData.length);
+              });
+            }
+          },
+          options: Options(responseType: ResponseType.bytes),
+        );
         final Uint8List videoBytes = Uint8List.fromList(response.data!);
 
         // Store the video in memory for now (to avoid IndexedDB transaction issues)
@@ -195,39 +217,87 @@ Widget build(BuildContext context) {
               const SizedBox(height: 20),
 
               // Download section
-              if (!videosDownloaded) ...[
-                const Text(
-                  'Videos not yet available offline.',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontVariations: [FontVariation('wght', (400))],
-                      fontFamily: "NunitoSans",
-                      fontSize: 16),
-                ),
-                const SizedBox(height: 10),
-                ElevatedButton(
-                  onPressed: downloadAllVideos,
-                  child: const Text('Download All Videos',
-                      style: TextStyle(
-                        fontFamily: "NunitoSans",
-                        fontVariations: [FontVariation('wght', (400))],
-                      )),
-                ),
-              ] else ...[
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('All videos available offline  ',
-                        style: (TextStyle(
-                          color: Colors.white,
-                          fontVariations: [FontVariation('wght', (400))],
-                          fontFamily: "NunitoSans",
-                        ))),
-                    Icon(Icons.cloud_download_outlined,
-                        color: Colors.white),
-                  ],
-                ),
-              ],
+                            if (isLoading) ...[
+                              Container(
+                                  margin: const EdgeInsets.all(10),
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                      color: Colors
+                                          .yellow)), // Show loading spinner
+                            ] else if (videosDownloaded == true) ...[
+                              Container(
+                                margin: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                                child: const Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          'All videos available offline  ',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: "Avenir",
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        Icon(Icons.cloud_download_outlined,
+                                            color: Colors.white),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ] else if (videosDownloaded == false) ...[
+                              Container(
+                                margin: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                                child: Column(
+                                  children: [
+                                    if (downloadProgress > 0.0 &&
+                                        downloadProgress < 1.0)
+                                      Center(
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical:
+                                                  20), // Add some vertical padding if needed
+                                          child: FractionallySizedBox(
+                                            widthFactor:
+                                                0.33, // Takes 1/3 of the screen width
+                                            child: LinearProgressIndicator(
+                                              value: downloadProgress,
+                                              color: Colors.yellow,
+                                              backgroundColor: Colors
+                                                  .grey, // Add a background color if desired
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      const Text(
+                                        'Videos not yet available offline.',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontVariations: [FontVariation('wght', (400))],
+                                            fontFamily: "NunitoSans",
+                                            fontSize: 16),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      ElevatedButton(
+                                        onPressed: downloadAllVideos,
+                                        child: const Text('Download All Videos',
+                                            style: TextStyle(
+                                              fontFamily: "NunitoSans",
+                                              fontVariations: [FontVariation('wght', (400))],
+                                            )),
+                                      ),
+                                  ],
+                                ),
+                              )
+                            ],
             ],
           ),
         ),
@@ -353,7 +423,7 @@ Widget build(BuildContext context) {
     } else if (kIsWeb) {
       // For web, check if the video is downloaded in IndexedDB
       final dbFactory = getIdbFactory();
-      final db = await dbFactory!.open('myVideos2DB', version: 1, onUpgradeNeeded: (VersionChangeEvent event) {
+      final db = await dbFactory!.open('p3VideosDBv1', version: 1, onUpgradeNeeded: (VersionChangeEvent event) {
         final db = event.database;
         db.createObjectStore('videos', keyPath: 'id');
       });
@@ -366,9 +436,24 @@ Widget build(BuildContext context) {
       if (rawResult != null) {
         final result = rawResult as Map<String, dynamic>;
         final Uint8List data = result['data'] as Uint8List;
-        final blob = html.Blob([data], 'video/mp4');
-        final url = html.Url.createObjectUrl(blob);
-        return url; // Local blob URL for playback
+         if (data != null) {
+    // Convert Uint8List to JSUint8Array
+    final jsUint8Array = data.toJS;
+
+    // Create a JSArray<JSUint8Array> containing the jsUint8Array
+    final jsArray = [jsUint8Array].toJS;
+
+    // Create a BlobPropertyBag with the desired MIME type
+    final blobPropertyBag = html.BlobPropertyBag(type: 'video/mp4');
+
+    // Create the Blob using the JSArray and BlobPropertyBag
+    final blob = html.Blob(jsArray, blobPropertyBag);
+
+    // Generate a URL for the Blob
+    final url = html.URL.createObjectURL(blob);
+
+    return url;
+  }
       }
     }
 
