@@ -123,7 +123,7 @@ Future<void> _checkIfVideosDownloaded() async {
       var video = videoData[i];
 
           if (kIsWeb && !kDebugMode) {
-      video['video'] = video['video']!.replaceFirst('/assets/', '');
+      video['video'] = '/assets${video['video']}';
     }
       try {
         // Download video
@@ -463,7 +463,7 @@ Widget build(BuildContext context) {
     }
     if (kIsWeb && !kDebugMode) {
     // Modify the path by removing one "/assets/" occurrence
-    videoUrl = videoUrl.replaceFirst('/assets/', '');
+    videoUrl = '/assets$videoUrl';
   }
     return videoUrl; // Fallback to the original network URL if not downloaded
   }

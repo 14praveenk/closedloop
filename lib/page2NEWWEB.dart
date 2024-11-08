@@ -112,7 +112,7 @@ class _Page2NEWState extends State<Page2NEW> {
 
           // Modify the path if on web and not in debug mode
     if (kIsWeb && !kDebugMode) {
-      video['video'] = video['video']!.replaceFirst('/assets/', '');
+      video['video'] = '/assets${video['video']}';
     }
     
       try {
@@ -668,8 +668,7 @@ class _Page2NEWState extends State<Page2NEW> {
     }
 
     if (kIsWeb && !kDebugMode) {
-    // Modify the path by removing one "/assets/" occurrence
-    videoUrl = videoUrl.replaceFirst('/assets/', '');
+    videoUrl = '/assets$videoUrl';
   }
   return videoUrl;
   }
