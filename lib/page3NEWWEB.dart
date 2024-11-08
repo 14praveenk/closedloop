@@ -384,42 +384,60 @@ Widget build(BuildContext context) {
     );
   }
 
-  void _playVideo(BuildContext context, String videoId, String videoUrl) async {
-    String localVideoUrl = await loadVideo(videoId, videoUrl);
-    _videoPlayerController = VideoPlayerController.network(localVideoUrl);
-      _videoPlayerController!.initialize().then((_) {
-        setState(() {
-          _chewieController = ChewieController(
-            videoPlayerController: _videoPlayerController!,
-            aspectRatio: _videoPlayerController!.value.aspectRatio,
-            autoPlay: true,
-            looping: false,
-          );
-        });
-        showDialog(
-          context: context,
-          builder: (context) => Dialog(
-            backgroundColor: Colors.transparent,
-            insetPadding: const EdgeInsets.all(10),
-            child: Container(
-              constraints: BoxConstraints(maxWidth: 600),
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              padding: const EdgeInsets.all(8),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: AspectRatio(
-                  aspectRatio: _videoPlayerController!.value.aspectRatio,
-                  child: Chewie(controller: _chewieController!),
-                ),
-              ),
+void _playVideo(BuildContext context, String videoId, String videoUrl) {
+  // Check if a previous video is still playing and dispose of it
+  _videoPlayerController?.dispose();
+  _chewieController?.dispose();
+
+  // Use asset video URL for Android or network URL for web
+  String localVideoUrl = kIsWeb ? videoUrl : videoUrl;
+
+  // Create a new VideoPlayerController
+  _videoPlayerController = VideoPlayerController.network(localVideoUrl);
+
+  // Show the video player dialog immediately
+  showDialog(
+    context: context,
+    builder: (context) => Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: const EdgeInsets.all(10),
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 600),
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        padding: const EdgeInsets.all(8),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: AspectRatio(
+            aspectRatio: 16 / 9, // Default aspect ratio; will be updated
+            child: FutureBuilder(
+              future: _videoPlayerController!.initialize(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  // Video is ready to play
+                  _chewieController = ChewieController(
+                    videoPlayerController: _videoPlayerController!,
+                    aspectRatio: _videoPlayerController!.value.aspectRatio,
+                    autoPlay: true,
+                    looping: false,
+                  );
+                  return Chewie(controller: _chewieController!);
+                } else {
+                  // Show a loading spinner while the video is initializing
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
             ),
           ),
-        );
-      });
-  }
+        ),
+      ),
+    ),
+  );
+}
 
   Future<String> loadVideo(String videoId, String videoUrl) async {
     if (!kIsWeb && io.Platform.isAndroid) {
