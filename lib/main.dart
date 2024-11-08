@@ -17,6 +17,9 @@ import 'package:cuberto_bottom_bar/cuberto_bottom_bar.dart';
 
 Future<void> main() async { PWAInstall().setup(installCallback: () {
     debugPrint('APP INSTALLED!');
+    if(PWAInstall().installPromptEnabled){
+                      PWAInstall().promptInstall_();
+    }
   });
   
   runApp(MyApp());}
