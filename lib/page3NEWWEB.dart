@@ -3,7 +3,6 @@ import 'package:web/web.dart' as html;
 import 'dart:io' as io;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'dart:typed_data';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 import 'package:dio/dio.dart';

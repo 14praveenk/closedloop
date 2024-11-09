@@ -30,27 +30,25 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
-  flutter_native_splash: ^2.4.0
-  card_swiper : ^3.0.0
   animated_notch_bottom_bar: ^1.0.0
   video_player: ^2.9.2
   path_provider: ^2.0.8
   dio: ^5.6.0
   chewie: ^1.8.5
-  universal_html: ^2.2.4
   idb_shim: ^2.6.1+7
   cuberto_bottom_bar: ^3.1.0
   flutter_svg: ^1.0.3
-  flutter_launcher_icons: ^0.14.1
   shared_preferences: ^2.2.3
   web: ^1.1.0
   pwa_install: ^0.0.5
+dependency_overrides:
+  win32: ^5.5.4
 dev_dependencies:
+  flutter_native_splash: ^2.4.0
+  flutter_launcher_icons: ^0.14.1
   flutter_test:
     sdk: flutter
 
@@ -73,9 +71,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
-    - assets/videos/
     - assets/thumbnails/
-    - assets/newVideos/
+    - assets/androidVideos/ #change when compiling to web
   fonts:
     - family: Inter
       fonts:

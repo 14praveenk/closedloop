@@ -1,7 +1,5 @@
-import 'dart:io'; // Import this for Platform
-import 'package:flutter/foundation.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
-import 'page1.dart';
 import 'package:pwa_install/pwa_install.dart';
 
 import 'page2NEWMOB.dart' // Stub implementation

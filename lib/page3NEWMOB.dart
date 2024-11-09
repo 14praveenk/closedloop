@@ -1,16 +1,13 @@
-import 'dart:io' as io;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'dart:typed_data';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
-import 'package:dio/dio.dart';
-import 'package:idb_shim/idb_browser.dart';
-import 'package:idb_shim/idb.dart';
 
 class Page3NEW extends StatefulWidget {
-  @override
-  _Page3NEWState createState() => _Page3NEWState();
+  const Page3NEW({super.key});
+
+    @override
+  State<Page3NEW> createState() => _Page3NEWState();
 }
 
 class _Page3NEWState extends State<Page3NEW> {
@@ -22,141 +19,57 @@ class _Page3NEWState extends State<Page3NEW> {
     {
       'id': 'video1',
       'title': 'LEADING A CARDIAC EMERGENCY',
-      'thumbnail': 'assets/cardiacEmergencyThumb.jpg',
+      'thumbnail': 'assets/thumbnails/closedloop.jpg',
       'video': kIsWeb 
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1728763566/closedloop/newVids/closedloopcomms_zfsyww.mp4'
-          : 'assets/videos/closedloopcomms.mp4'},
+          ? 'assets/androidVideos/5clc.webm'
+          : 'assets/androidVideos/5clc.webm'},
     {
       'id': 'video2',
       'title': 'DR ABC Assessment',
-      'thumbnail': 'assets/assessThumb.jpg',
+      'thumbnail': 'assets/thumbnails/breathingAssess.jpg',
       'video': kIsWeb
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746672/closedloop/newVids/Patientbreathing_sbaeu9.mp4'
-          : 'assets/videos/patientbreathing.mp4'},
+          ? 'assets/androidVideos/1assessBreathing.webm'
+          : 'assets/androidVideos/1assessBreathing.webm'},
         {
       'id': 'video3',
       'title': 'DR ABC Assessment',
-      'thumbnail': 'assets/drabcThumb.jpg',
+      'thumbnail': 'assets/thumbnails/drabc.jpg',
       'video': kIsWeb
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746671/closedloop/newVids/Drabccardiac_xblixv.mp4'
-          : 'assets/videos/drabccardiac.mp4',
+          ? 'assets/androidVideos/2drabccardiac.webm'
+          : 'assets/androidVideos/2drabccardiac.webm',
     },
         {
       'id': 'video4',
       'title': 'HOW TO CPR',
-      'thumbnail': 'assets/cprThumb.jpg',
+      'thumbnail': 'assets/thumbnails/cpr.jpg',
       'video': kIsWeb
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746671/closedloop/newVids/Cpr_qwmmm4.mp4'
-          : 'assets/videos/cpr.mp4',   
+          ? 'assets/androidVideos/3cpr.webm'
+          : 'assets/androidVideos/3cpr.webm',   
     },
+        {
+      'id': 'video5',
+      'title': 'HOW TO USE A DEFIB',
+      'thumbnail': 'assets/thumbnails/defib.jpg',
+      'video': kIsWeb 
+          ? 'assets/androidVideos/4defib.webm'
+          : 'assets/androidVideos/4defib.webm'},
+           {
+      'id': 'video6',
+      'title': 'HOW TO DO RECOVERY POSITION',
+      'thumbnail': 'assets/thumbnails/recovery.jpg',
+      'video': kIsWeb 
+          ? 'assets/androidVideos/6recovpos.webm'
+          : 'assets/androidVideos/6recovpos.webm'},
 
   ];
 
   @override
   void initState() {
     super.initState();
-    _checkIfVideosDownloaded();
   }
 
-  Future<void> _checkIfVideosDownloaded() async {
-    if (!kIsWeb) return;
-    final dbFactory = getIdbFactory();
-    final db = await dbFactory!.open('myVideos2DB', version: 1,
-        onUpgradeNeeded: (VersionChangeEvent event) {
-      final db = event.database;
-      db.createObjectStore('videos', keyPath: 'id');
-    });
 
-    final transaction = db.transaction('videos', idbModeReadOnly);
-    final store = transaction.objectStore('videos');
 
-    // Check if all videos are downloaded
-    bool allDownloaded = true;
-    for (var video in videoData) {
-      final result = await store.getObject(video['id']!);
-      if (result == null) {
-        allDownloaded = false;
-        break;
-      }
-    }
-
-    setState(() {
-      videosDownloaded = allDownloaded;
-    });
-
-    db.close();
-  }
-
-  Future<void> downloadAllVideos() async {
-    final dbFactory = getIdbFactory();
-    final db = await dbFactory!.open('myVideos2DB', version: 1,
-        onUpgradeNeeded: (VersionChangeEvent event) {
-      final db = event.database;
-      if (!db.objectStoreNames.contains('videos')) {
-        db.createObjectStore('videos', keyPath: 'id');
-      }
-    });
-
-    // Download all videos outside the IndexedDB transaction
-    List<Map<String, dynamic>> downloadedVideos = [];
-
-    for (var video in videoData) {
-      try {
-        // Download video
-        final response = await Dio().get<List<int>>(video['video']!,
-            options: Options(responseType: ResponseType.bytes));
-        final Uint8List videoBytes = Uint8List.fromList(response.data!);
-
-        // Store the video in memory for now (to avoid IndexedDB transaction issues)
-        downloadedVideos.add({'id': video['id'], 'data': videoBytes});
-      } catch (e) {
-        print('Failed to download video ${video['title']}: $e');
-      }
-    }
-
-    // Now store each downloaded video in IndexedDB, using a new transaction
-    for (var video in downloadedVideos) {
-      final transaction =
-          db.transaction('videos', idbModeReadWrite); // Open new transaction
-      final store = transaction.objectStore('videos');
-
-      try {
-        await store.put(video); // Store video in IndexedDB
-        await transaction
-            .completed; // Ensure transaction completes before moving on
-      } catch (e) {
-        print('Failed to store video ${video['id']}: $e');
-      }
-    }
-
-    db.close();
-    _notifyDownloadComplete(context);
-    // After all videos are downloaded and stored, update the UI
-    setState(() {
-      videosDownloaded = true;
-    });
-  }
-
-  void _notifyDownloadComplete(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Download Complete'),
-          content: Text(
-              'All videos have been successfully downloaded and are now available offline.'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 
  @override
   Widget build(BuildContext context) {
@@ -211,15 +124,6 @@ class _Page3NEWState extends State<Page3NEW> {
         : width * 0.9; // Max width of 1300px or 90% of screen width
   }
 
-  // Helper function to limit the max width of the button
-  double _getButtonMaxWidth(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    return width > 600
-        ? 400
-        : width *
-            0.8; // Max width of 400px for the button or 80% of screen width
-  }
-
   Widget _buildVideoCard(Map<String, String> video) {
     return Card(
       color: Color.fromARGB(175, 27, 27, 27),
@@ -268,43 +172,60 @@ class _Page3NEWState extends State<Page3NEW> {
     );
   }
 
-  void _playVideo(BuildContext context, String videoId, String videoUrl) async {
-    String localVideoUrl = await loadVideo(videoId, videoUrl);
-    _videoPlayerController = VideoPlayerController.asset(localVideoUrl);
-      _videoPlayerController!.initialize().then((_) {
-        setState(() {
-          _chewieController = ChewieController(
-            videoPlayerController: _videoPlayerController!,
-            aspectRatio: _videoPlayerController!.value.aspectRatio,
-            autoPlay: true,
-            looping: false,
-          );
-        });
-        showDialog(
-          context: context,
-          builder: (context) => Dialog(
-            backgroundColor: Colors.transparent,
-            insetPadding: const EdgeInsets.all(10),
-            child: Container(
-              constraints: BoxConstraints(maxWidth: 600),
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              padding: const EdgeInsets.all(8),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: AspectRatio(
-                  aspectRatio: _videoPlayerController!.value.aspectRatio,
-                  child: Chewie(controller: _chewieController!),
-                ),
-              ),
+void _playVideo(BuildContext context, String videoId, String videoUrl) async {
+  // Check if a previous video is still playing and dispose of it
+  _videoPlayerController?.dispose();
+  _chewieController?.dispose();
+
+  // Use asset video URL for Android or network URL for web
+ String localVideoUrl = await loadVideo(videoId, videoUrl);
+
+  // Create a new VideoPlayerController
+  _videoPlayerController = VideoPlayerController.asset(localVideoUrl);
+
+  // Show the video player dialog immediately
+  showDialog(
+    context: context,
+    builder: (context) => Dialog(
+      backgroundColor: Colors.transparent,
+      insetPadding: const EdgeInsets.all(10),
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 600),
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(15),
+        ),
+        padding: const EdgeInsets.all(8),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: AspectRatio(
+            aspectRatio: 16 / 9, // Default aspect ratio; will be updated
+            child: FutureBuilder(
+              future: _videoPlayerController!.initialize(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  // Video is ready to play
+                  _chewieController = ChewieController(
+                    videoPlayerController: _videoPlayerController!,
+                    aspectRatio: _videoPlayerController!.value.aspectRatio,
+                    autoPlay: true,
+                    looping: false,
+                  );
+                  return Chewie(controller: _chewieController!);
+                } else {
+                  // Show a loading spinner while the video is initializing
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
             ),
           ),
-        );
-      });
-  }
-
+        ),
+      ),
+    ),
+  );
+}
   Future<String> loadVideo(String videoId, String videoUrl) async {
       // For Android, always use the asset video URL
       return videoUrl;
