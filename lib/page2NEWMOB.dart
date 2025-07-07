@@ -37,26 +37,18 @@ class _Page2NEWState extends State<Page2NEW> {
     {
       'id': 'video1',
       'title': 'THE PATIENT IS NOT BREATHING',
-      'thumbnail': 'assets/drabcThumb.jpg',
-      'video': kIsWeb 
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746671/closedloop/newVids/Drabccardiac_xblixv.mp4'
-          : 'assets/videos/drabccardiac.mp4',  // Use asset path for Android
-    },
-    {
-      'id': 'video2',
-      'title': 'HOW TO CPR',
-      'thumbnail': 'assets/cprThumb.jpg',
-      'video': kIsWeb 
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746671/closedloop/newVids/Cpr_qwmmm4.mp4'
-          : 'assets/videos/cpr.mp4',  // Use asset path for Android
+      'thumbnail': 'assets/thumbnails/no.png',
+      'video': kIsWeb
+          ? 'assets/newVideos/no.mp4'
+          : 'assets/newVideos/no.mp4', // Use asset path for Android
     },
     {
       'id': 'video3',
       'title': 'THE PATIENT IS BREATHING',
-      'thumbnail': 'assets/assessThumb.jpg',
-      'video': kIsWeb 
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746672/closedloop/newVids/Patientbreathing_sbaeu9.mp4'
-          : 'assets/videos/patientbreathing.mp4',  // Use asset path for Android
+      'thumbnail': 'assets/thumbnails/yes.png',
+      'video': kIsWeb
+          ? 'assets/newVideos/yes.mp4'
+          : 'assets/newVideos/yes.mp4', // Use asset path for Android
     },
   ];
 
@@ -295,7 +287,12 @@ class _Page2NEWState extends State<Page2NEW> {
                                 padding: EdgeInsets.all(15),
                               ),
                               onPressed: () {
-                                _handleBreathingQuestion(true); // Breathing
+                                 _playVideo(
+                                                        context,
+                                                        videoData[1]['id']!,
+                                                        videoData[1]['video']!,
+                                                      );
+                                                      // Breathing
                               },
                               child: Text(
                                 'Yes',
@@ -315,8 +312,11 @@ class _Page2NEWState extends State<Page2NEW> {
                                 padding: EdgeInsets.all(15),
                               ),
                               onPressed: () {
-                                _handleBreathingQuestion(
-                                    false); // Not Breathing
+                               _playVideo(
+                                                      context,
+                                                      videoData[0]['id']!,
+                                                      videoData[0]['video']!,
+                                                    ); // Not Breathing
                               },
                               child: Text(
                                 'No',

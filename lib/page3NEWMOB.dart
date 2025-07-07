@@ -22,33 +22,47 @@ class _Page3NEWState extends State<Page3NEW> {
     {
       'id': 'video1',
       'title': 'LEADING A CARDIAC EMERGENCY',
-      'thumbnail': 'assets/cardiacEmergencyThumb.jpg',
+      'thumbnail': 'assets/thumbnails/closedloop.jpg',
       'video': kIsWeb 
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1728763566/closedloop/newVids/closedloopcomms_zfsyww.mp4'
-          : 'assets/videos/closedloopcomms.mp4'},
+          ? 'assets/newVideos/5clc.mp4'
+          : 'assets/newVideos/5clc.mp4'},
     {
       'id': 'video2',
       'title': 'DR ABC Assessment',
-      'thumbnail': 'assets/assessThumb.jpg',
+      'thumbnail': 'assets/thumbnails/breathingAssess.jpg',
       'video': kIsWeb
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746672/closedloop/newVids/Patientbreathing_sbaeu9.mp4'
-          : 'assets/videos/patientbreathing.mp4'},
+          ? 'assets/newVideos/1assessBreathing.mp4'
+          : 'assets/newVideos/1assessBreathing.mp4'},
         {
       'id': 'video3',
       'title': 'DR ABC Assessment',
-      'thumbnail': 'assets/drabcThumb.jpg',
+      'thumbnail': 'assets/thumbnails/drabc.jpg',
       'video': kIsWeb
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746671/closedloop/newVids/Drabccardiac_xblixv.mp4'
-          : 'assets/videos/drabccardiac.mp4',
+          ? 'assets/newVideos/2drabccardiac.mp4'
+          : 'assets/newVideos/2drabccardiac.mp4',
     },
         {
       'id': 'video4',
       'title': 'HOW TO CPR',
-      'thumbnail': 'assets/cprThumb.jpg',
+      'thumbnail': 'assets/thumbnails/cpr.jpg',
       'video': kIsWeb
-          ? 'https://res.cloudinary.com/dtlly4vrq/video/upload/v1726746671/closedloop/newVids/Cpr_qwmmm4.mp4'
-          : 'assets/videos/cpr.mp4',   
+          ? 'assets/newVideos/3cpr.mp4'
+          : 'assets/newVideos/3cpr.mp4',   
     },
+        {
+      'id': 'video5',
+      'title': 'HOW TO USE A DEFIB',
+      'thumbnail': 'assets/thumbnails/defib.jpg',
+      'video': kIsWeb 
+          ? 'assets/newVideos/4defib.mp4'
+          : 'assets/newVideos/4defib.mp4'},
+           {
+      'id': 'video6',
+      'title': 'HOW TO DO RECOVERY POSITION',
+      'thumbnail': 'assets/thumbnails/recovery.jpg',
+      'video': kIsWeb 
+          ? 'assets/newVideos/6recovpos.mp4'
+          : 'assets/newVideos/6recovpos.mp4'},
 
   ];
 

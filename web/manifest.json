@@ -8,6 +8,36 @@
     "description": "Learn life-saving skills today.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
+    "screenshots": [
+        {
+            "src": "icons/screenshot1.png",
+            "sizes": "1170x2532",
+            "type": "image/png",
+            "label": "Guide",
+            "form_factor": "narrow"
+        },
+        {
+            "src": "icons/screenshot2.png",
+            "sizes": "1170x2532",
+            "type": "image/png",
+            "label": "Videos",
+            "form_factor": "narrow"
+        },
+        {
+            "src": "icons/screenshot3.png",
+            "sizes": "1920x1279",
+            "type": "image/png",
+            "label": "Guide",
+            "form_factor": "wide"
+        },
+        {
+            "src": "icons/screenshot4.png",
+            "sizes": "1920x1279",
+            "type": "image/png",
+            "label": "Videos",
+            "form_factor": "wide"
+        }
+    ],
     "icons": [
         {
             "src": "icons/Icon-192.png",
@@ -31,35 +61,5 @@
             "type": "image/png",
             "purpose": "maskable"
         }
-    ],
-    "screenshots": [
-        {
-         "src": "icons/screenshot1.png",
-          "sizes": "1170x2532",
-          "type": "image/png",
-          "label": "Guide",
-          "form_factor": "narrow"
-        },
-        {
-            "src": "icons/screenshot2.png",
-             "sizes": "1170x2532",
-             "type": "image/png",
-             "label": "Videos",
-             "form_factor": "narrow"
-           },
-           {
-            "src": "icons/screenshot3.png",
-             "sizes": "1920x1279",
-             "type": "image/png",
-             "label": "Guide",
-             "form_factor": "wide"
-           },
-           {
-               "src": "icons/screenshot4.png",
-                "sizes": "1920x1279",
-                "type": "image/png",
-                "label": "Videos",
-                "form_factor": "wide"
-              }
     ]
 }
