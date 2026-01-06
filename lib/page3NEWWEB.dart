@@ -11,6 +11,8 @@ import 'package:idb_shim/idb.dart';
 import 'package:flutter/foundation.dart';
 
 class Page3NEW extends StatefulWidget {
+  const Page3NEW({super.key});
+
   @override
   _Page3NEWState createState() => _Page3NEWState();
 }
@@ -175,12 +177,12 @@ Future<void> _checkIfVideosDownloaded() async {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Download Complete'),
-          content: Text(
+          title: const Text('Download Complete'),
+          content: const Text(
               'All videos have been successfully downloaded and are now available offline.'),
           actions: <Widget>[
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -226,7 +228,7 @@ Widget build(BuildContext context) {
                                   margin: const EdgeInsets.all(10),
                                   height: 20,
                                   width: 20,
-                                  child: CircularProgressIndicator(
+                                  child: const CircularProgressIndicator(
                                       color: Colors
                                           .yellow)), // Show loading spinner
                             ] else if (videosDownloaded == true) ...[
@@ -337,7 +339,7 @@ Widget build(BuildContext context) {
 
   Widget _buildVideoCard(Map<String, String> video) {
     return Card(
-      color: Color.fromARGB(175, 27, 27, 27),
+      color: const Color.fromARGB(175, 27, 27, 27),
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: Stack(
@@ -458,24 +460,22 @@ void _playVideo(BuildContext context, String videoId, String videoUrl) async {
       if (rawResult != null) {
         final result = rawResult as Map<String, dynamic>;
         final Uint8List data = result['data'] as Uint8List;
-         if (data != null) {
-    // Convert Uint8List to JSUint8Array
-    final jsUint8Array = data.toJS;
+  // Convert Uint8List to JSUint8Array
+  final jsUint8Array = data.toJS;
 
-    // Create a JSArray<JSUint8Array> containing the jsUint8Array
-    final jsArray = [jsUint8Array].toJS;
+  // Create a JSArray<JSUint8Array> containing the jsUint8Array
+  final jsArray = [jsUint8Array].toJS;
 
-    // Create a BlobPropertyBag with the desired MIME type
-    final blobPropertyBag = html.BlobPropertyBag(type: 'video/mp4');
+  // Create a BlobPropertyBag with the desired MIME type
+  final blobPropertyBag = html.BlobPropertyBag(type: 'video/mp4');
 
-    // Create the Blob using the JSArray and BlobPropertyBag
-    final blob = html.Blob(jsArray, blobPropertyBag);
+  // Create the Blob using the JSArray and BlobPropertyBag
+  final blob = html.Blob(jsArray, blobPropertyBag);
 
-    // Generate a URL for the Blob
-    final url = html.URL.createObjectURL(blob);
+  // Generate a URL for the Blob
+  final url = html.URL.createObjectURL(blob);
 
-    return url;
-  }
+  return url;
       }
     }
     if (kIsWeb && !kDebugMode) {

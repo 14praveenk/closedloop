@@ -23,17 +23,19 @@ Future<void> main() async { PWAInstall().setup(installCallback: () {
   runApp(MyApp());}
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: const OnBoardingPage(), // Load the welcome page first
+    return const MaterialApp(
+      home: OnBoardingPage(), // Load the welcome page first
     );
   }
 }
 
 // Create a new OnBoardingPage class
 class OnBoardingPage extends StatelessWidget {
-  const OnBoardingPage({Key? key}) : super(key: key);
+  const OnBoardingPage({super.key});
 
   // This function will navigate to the MainPage when the button is pressed
   void _onIntroEnd(BuildContext context) {
@@ -48,7 +50,7 @@ class OnBoardingPage extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/newBg.jpg"), // Background image
+            image: const AssetImage("assets/newBg.jpg"), // Background image
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
               Colors.black.withOpacity(0.6), // Adjust opacity as needed
@@ -61,18 +63,18 @@ class OnBoardingPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                margin: EdgeInsets.only(bottom: 40),
+                margin: const EdgeInsets.only(bottom: 40),
                 child: Image.asset('assets/newIcon.png', width: 250), // Display the icon
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.fromLTRB(25, 15, 25, 15),
-                  backgroundColor: Color.fromRGBO(255, 224, 70, 1), // Button color
+                  padding: const EdgeInsets.fromLTRB(25, 15, 25, 15),
+                  backgroundColor: const Color.fromRGBO(255, 224, 70, 1), // Button color
                 ),
                 child: Text(
                   'Revive someone today',
                   textScaleFactor: 1.25 * MediaQuery.of(context).textScaleFactor, // Adjust text scaling
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                     fontFamily: 'Avenir-Heavy',
                   ),
@@ -89,6 +91,8 @@ class OnBoardingPage extends StatelessWidget {
 
 // MainPage remains unchanged
 class MainPage extends StatefulWidget {
+  const MainPage({super.key});
+
   @override
   _MainPageState createState() => _MainPageState();
 }
@@ -97,8 +101,8 @@ class _MainPageState extends State<MainPage> {
   int _currentPage = 0; // To track the active page
   final _pageController = PageController(initialPage: 0);
   final _controller = NotchBottomBarController(index: 0);
-  final List<Widget> pages = [Page2NEW(), Page3NEW()];
-  bool _promptShown = true; // Flag to track if the prompt has been shown
+  final List<Widget> pages = [const Page2NEW(), const Page3NEW()];
+  final bool _promptShown = true; // Flag to track if the prompt has been shown
 
   @override
   void initState() {
@@ -117,7 +121,7 @@ class _MainPageState extends State<MainPage> {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: AssetImage("assets/newBg.jpg"),
+          image: const AssetImage("assets/newBg.jpg"),
           fit: BoxFit.cover,
           colorFilter: ColorFilter.mode(
             Colors.black.withOpacity(0.7),  // Adjust opacity as needed
@@ -148,11 +152,11 @@ class _MainPageState extends State<MainPage> {
 
   Widget buildBottomBar() {
     return CubertoBottomBar(
-      barBackgroundColor: Color.fromARGB(175, 27, 27, 27),
+      barBackgroundColor: const Color.fromARGB(175, 27, 27, 27),
       selectedTab: _currentPage,
       tabStyle: CubertoTabStyle.styleFadedBackground,
       inactiveIconColor: Colors.white,
-      tabs: [
+      tabs: const [
         TabData(
           iconData: Icons.video_call_outlined,
           title: 'Watch',
@@ -178,7 +182,7 @@ class _MainPageState extends State<MainPage> {
       backgroundColor: Colors.transparent,
       selectedIndex: _controller.index,
       useIndicator: true,
-      indicatorColor: Color.fromARGB(175, 27, 27, 27),
+      indicatorColor: const Color.fromARGB(175, 27, 27, 27),
       onDestinationSelected: (index) {
         setState(() {
           _controller.index = index;
@@ -186,7 +190,7 @@ class _MainPageState extends State<MainPage> {
         });
       },
       labelType: NavigationRailLabelType.all,
-      destinations: [
+      destinations: const [
         NavigationRailDestination(
           icon: Icon(Icons.video_call_outlined, color: Colors.white),
           selectedIcon: Icon(Icons.video_call_outlined, color: Color.fromARGB(255, 217, 221, 4)),

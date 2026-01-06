@@ -74,7 +74,7 @@ class _Page3NEWState extends State<Page3NEW> {
  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(175, 27, 27, 27),
+      backgroundColor: const Color.fromARGB(175, 27, 27, 27),
       body: SingleChildScrollView(
         child: Center(
           child: ConstrainedBox(
@@ -126,7 +126,7 @@ class _Page3NEWState extends State<Page3NEW> {
 
   Widget _buildVideoCard(Map<String, String> video) {
     return Card(
-      color: Color.fromARGB(175, 27, 27, 27),
+      color: const Color.fromARGB(175, 27, 27, 27),
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: Stack(
