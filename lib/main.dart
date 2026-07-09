@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pwa_install/pwa_install.dart';
 
 import 'page2NEWMOB.dart' // Stub implementation
     if (dart.library.io) 'page2NEWMOB.dart' // dart:io implementation
@@ -14,13 +13,6 @@ import 'package:cuberto_bottom_bar/cuberto_bottom_bar.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  PWAInstall().setup(installCallback: () {
-    debugPrint('APP INSTALLED!');
-    if(PWAInstall().installPromptEnabled){
-                      PWAInstall().promptInstall_();
-    }
-  });
-  
   runApp(const MyApp());
 }
 
