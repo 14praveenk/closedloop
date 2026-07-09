@@ -90,10 +90,74 @@
       bottom: 0;
       right: 0;
     }
+
+    #splash-loader {
+      position: absolute;
+      top: calc(50% + 92px);
+      left: 50%;
+      width: min(160px, 42vw);
+      transform: translateX(-50%);
+    }
+
+    .splash-spinner {
+      width: 28px;
+      height: 28px;
+      margin: 0 auto 18px;
+      border: 3px solid rgba(255, 255, 255, 0.22);
+      border-top-color: #ffd51f;
+      border-radius: 50%;
+      animation: splash-spin 0.8s linear infinite;
+    }
+
+    .splash-progress {
+      position: relative;
+      height: 3px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .splash-progress::after {
+      position: absolute;
+      inset: 0;
+      width: 45%;
+      border-radius: inherit;
+      background: #ffd51f;
+      content: "";
+      animation: splash-progress 1.25s ease-in-out infinite;
+    }
+
+    @keyframes splash-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes splash-progress {
+      0% {
+        transform: translateX(-120%);
+      }
+
+      55% {
+        transform: translateX(95%);
+      }
+
+      100% {
+        transform: translateX(240%);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .splash-spinner,
+      .splash-progress::after {
+        animation: none;
+      }
+    }
   </style>
   <script id="splash-screen-script">
     function removeSplashFromWeb() {
       document.getElementById("splash")?.remove();
+      document.getElementById("splash-loader")?.remove();
       document.getElementById("splash-branding")?.remove();
       document.body.style.background = "transparent";
     }
@@ -106,6 +170,10 @@
       <source srcset="splash/img/dark-1x.png 1x, splash/img/dark-2x.png 2x, splash/img/dark-3x.png 3x, splash/img/dark-4x.png 4x" media="(prefers-color-scheme: dark)">
       <img class="center" aria-hidden="true" src="splash/img/light-1x.png" alt="">
   </picture>
+  <div id="splash-loader" aria-label="Loading" role="status">
+    <div class="splash-spinner" aria-hidden="true"></div>
+    <div class="splash-progress" aria-hidden="true"></div>
+  </div>
   <script src="flutter_bootstrap.js" async=""></script>
 
 <!-- Capture PWA install prompt event -->
