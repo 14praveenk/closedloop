@@ -1,4 +1,3 @@
-import 'dart:io' as io show Platform;
 import 'dart:js_interop';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
@@ -29,6 +28,7 @@ class Page2NEW extends StatefulWidget {
 class _Page2NEWState extends State<Page2NEW> {
   VideoPlayerController? _videoPlayerController2;
   ChewieController? _chewieController;
+  String? _activeObjectUrl;
   bool? videosDownloaded; // Change to nullable bool
   bool isLoading = true; // Add loading flag
   int selectedVideoId = 0;
@@ -41,19 +41,22 @@ class _Page2NEWState extends State<Page2NEW> {
       'id': 'video1',
       'title': 'THE PATIENT IS NOT BREATHING',
       'thumbnail': 'assets/thumbnails/no.png',
-      'video': kIsWeb
-          ? 'assets/newVideos/no.mp4'
-          : 'assets/newVideos/no.mp4', // Use asset path for Android
+      'video': 'assets/newVideos/no.mp4',
     },
     {
       'id': 'video3',
       'title': 'THE PATIENT IS BREATHING',
       'thumbnail': 'assets/thumbnails/yes.png',
-      'video': kIsWeb
-          ? 'assets/newVideos/yes.mp4'
-          : 'assets/newVideos/yes.mp4', // Use asset path for Android
+      'video': 'assets/newVideos/yes.mp4',
     },
   ];
+
+  String _webAssetUrl(String assetPath) {
+    if (kDebugMode || assetPath.startsWith('blob:') || assetPath.startsWith('/')) {
+      return assetPath;
+    }
+    return '/assets/$assetPath';
+  }
 
   @override
   void initState() {
@@ -110,14 +113,9 @@ class _Page2NEWState extends State<Page2NEW> {
     for (var i = 0; i < videoData.length; i++) {
       var video = videoData[i];
 
-          // Modify the path if on web and not in debug mode
-    if (kIsWeb && !kDebugMode) {
-      video['video'] = '/assets/${video['video']}';
-    }
-    
       try {
         final response = await Dio().get<List<int>>(
-          video['video']!,
+          _webAssetUrl(video['video']!),
           onReceiveProgress: (received, total) {
             if (total != -1) {
               setState(() {
@@ -483,7 +481,7 @@ class _Page2NEWState extends State<Page2NEW> {
                                   margin: const EdgeInsets.all(10),
                                   height: 20,
                                   width: 20,
-                                  child: CircularProgressIndicator(
+                                  child: const CircularProgressIndicator(
                                       color: Colors
                                           .yellow)), // Show loading spinner
                             ] else if (videosDownloaded == true) ...[
@@ -591,12 +589,14 @@ void _playVideo(BuildContext context, String videoId, String videoUrl) async {
   // Check if a previous video is still playing and dispose of it
   _videoPlayerController2?.dispose();
   _chewieController?.dispose();
+  _revokeActiveObjectUrl();
 
   // Use asset video URL for Android or network URL for web
   String localVideoUrl = await loadVideo(videoId, videoUrl);
 
   // Create a new VideoPlayerController
-  _videoPlayerController2 = VideoPlayerController.network(localVideoUrl);
+  _videoPlayerController2 =
+      VideoPlayerController.networkUrl(Uri.parse(localVideoUrl));
 
   // Show the video player dialog immediately
   showDialog(
@@ -644,10 +644,7 @@ void _playVideo(BuildContext context, String videoId, String videoUrl) async {
 
 
   Future<String> loadVideo(String videoId, String videoUrl) async {
-    if (!kIsWeb && io.Platform.isAndroid) {
-      // For Android, always use the asset video URL
-      return videoUrl;
-    } else if (kIsWeb) {
+    if (kIsWeb) {
       // For web, check if the video is downloaded in IndexedDB
       final dbFactory = getIdbFactory();
       final db = await dbFactory!.open('p2VideosDBv1', version: 1,
@@ -664,37 +661,41 @@ void _playVideo(BuildContext context, String videoId, String videoUrl) async {
       if (rawResult != null) {
         final result = rawResult as Map<String, dynamic>;
         final Uint8List data = result['data'] as Uint8List;
- if (data != null) {
-    // Convert Uint8List to JSUint8Array
-    final jsUint8Array = data.toJS;
+  // Convert Uint8List to JSUint8Array
+  final jsUint8Array = data.toJS;
 
-    // Create a JSArray<JSUint8Array> containing the jsUint8Array
-    final jsArray = [jsUint8Array].toJS;
+  // Create a JSArray<JSUint8Array> containing the jsUint8Array
+  final jsArray = [jsUint8Array].toJS;
 
-    // Create a BlobPropertyBag with the desired MIME type
-    final blobPropertyBag = html.BlobPropertyBag(type: 'video/mp4');
+  // Create a BlobPropertyBag with the desired MIME type
+  final blobPropertyBag = html.BlobPropertyBag(type: 'video/mp4');
 
-    // Create the Blob using the JSArray and BlobPropertyBag
-    final blob = html.Blob(jsArray, blobPropertyBag);
+  // Create the Blob using the JSArray and BlobPropertyBag
+  final blob = html.Blob(jsArray, blobPropertyBag);
 
-    // Generate a URL for the Blob
-    final url = html.URL.createObjectURL(blob);
+  // Generate a URL for the Blob
+  final url = html.URL.createObjectURL(blob);
 
-    return url;
-  }
+  _activeObjectUrl = url;
+  return url;
       }
     }
 
-    if (kIsWeb && !kDebugMode) {
-    videoUrl = '/assets/$videoUrl';
+    return _webAssetUrl(videoUrl);
   }
-  return videoUrl;
+
+  void _revokeActiveObjectUrl() {
+    final objectUrl = _activeObjectUrl;
+    if (objectUrl == null) return;
+    html.URL.revokeObjectURL(objectUrl);
+    _activeObjectUrl = null;
   }
 
   @override
   void dispose() {
     _videoPlayerController2?.dispose();
     _chewieController?.dispose();
+    _revokeActiveObjectUrl();
     super.dispose();
   }
 }

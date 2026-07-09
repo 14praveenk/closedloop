@@ -1,17 +1,16 @@
 import 'dart:js_interop';
 import 'package:web/web.dart' as html;
-import 'dart:io' as io;
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'dart:typed_data';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 import 'package:dio/dio.dart';
 import 'package:idb_shim/idb_browser.dart';
 import 'package:idb_shim/idb.dart';
-import 'package:flutter/foundation.dart';
 
 class Page3NEW extends StatefulWidget {
+  const Page3NEW({super.key});
+
   @override
   _Page3NEWState createState() => _Page3NEWState();
 }
@@ -19,6 +18,7 @@ class Page3NEW extends StatefulWidget {
 class _Page3NEWState extends State<Page3NEW> {
   VideoPlayerController? _videoPlayerController;
   ChewieController? _chewieController;
+  String? _activeObjectUrl;
   bool? videosDownloaded;
     bool isLoading = true; // Add loading flag
   double downloadProgress = 0.0; // New variable for download progress
@@ -28,48 +28,43 @@ class _Page3NEWState extends State<Page3NEW> {
       'id': 'video1',
       'title': 'LEADING A CARDIAC EMERGENCY',
       'thumbnail': 'assets/thumbnails/closedloop.jpg',
-      'video': kIsWeb 
-          ? 'assets/newVideos/5clc.mp4'
-          : 'assets/newVideos/5clc.mp4'},
+      'video': 'assets/newVideos/5clc.mp4'},
     {
       'id': 'video2',
       'title': 'DR ABC Assessment',
       'thumbnail': 'assets/thumbnails/breathingAssess.jpg',
-      'video': kIsWeb
-          ? 'assets/newVideos/1assessBreathing.mp4'
-          : 'assets/newVideos/1assessBreathing.mp4'},
+      'video': 'assets/newVideos/1assessBreathing.mp4'},
         {
       'id': 'video3',
       'title': 'DR ABC Assessment',
       'thumbnail': 'assets/thumbnails/drabc.jpg',
-      'video': kIsWeb
-          ? 'assets/newVideos/2drabccardiac.mp4'
-          : 'assets/newVideos/2drabccardiac.mp4',
+      'video': 'assets/newVideos/2drabccardiac.mp4',
     },
         {
       'id': 'video4',
       'title': 'HOW TO CPR',
       'thumbnail': 'assets/thumbnails/cpr.jpg',
-      'video': kIsWeb
-          ? 'assets/newVideos/3cpr.mp4'
-          : 'assets/newVideos/3cpr.mp4',   
+      'video': 'assets/newVideos/3cpr.mp4',
     },
         {
       'id': 'video5',
       'title': 'HOW TO USE A DEFIB',
       'thumbnail': 'assets/thumbnails/defib.jpg',
-      'video': kIsWeb 
-          ? 'assets/newVideos/4defib.mp4'
-          : 'assets/newVideos/4defib.mp4'},
+      'video': 'assets/newVideos/4defib.mp4'},
            {
       'id': 'video6',
       'title': 'HOW TO DO RECOVERY POSITION',
       'thumbnail': 'assets/thumbnails/recovery.jpg',
-      'video': kIsWeb 
-          ? 'assets/newVideos/6recovpos.mp4'
-          : 'assets/newVideos/6recovpos.mp4'},
+      'video': 'assets/newVideos/6recovpos.mp4'},
 
   ];
+
+  String _webAssetUrl(String assetPath) {
+    if (kDebugMode || assetPath.startsWith('blob:') || assetPath.startsWith('/')) {
+      return assetPath;
+    }
+    return '/assets/$assetPath';
+  }
 
   @override
   void initState() {
@@ -122,13 +117,10 @@ Future<void> _checkIfVideosDownloaded() async {
     for (var i=0;i<videoData.length;i++) {
       var video = videoData[i];
 
-          if (kIsWeb && !kDebugMode) {
-      video['video'] = '/assets/${video['video']}';
-    }
       try {
         // Download video
                 final response = await Dio().get<List<int>>(
-          video['video']!,
+          _webAssetUrl(video['video']!),
           onReceiveProgress: (received, total) {
             if (total != -1) {
               setState(() {
@@ -176,12 +168,12 @@ Future<void> _checkIfVideosDownloaded() async {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Download Complete'),
-          content: Text(
+          title: const Text('Download Complete'),
+          content: const Text(
               'All videos have been successfully downloaded and are now available offline.'),
           actions: <Widget>[
             TextButton(
-              child: Text('OK'),
+              child: const Text('OK'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -227,7 +219,7 @@ Widget build(BuildContext context) {
                                   margin: const EdgeInsets.all(10),
                                   height: 20,
                                   width: 20,
-                                  child: CircularProgressIndicator(
+                                  child: const CircularProgressIndicator(
                                       color: Colors
                                           .yellow)), // Show loading spinner
                             ] else if (videosDownloaded == true) ...[
@@ -338,7 +330,7 @@ Widget build(BuildContext context) {
 
   Widget _buildVideoCard(Map<String, String> video) {
     return Card(
-      color: Color.fromARGB(175, 27, 27, 27),
+      color: const Color.fromARGB(175, 27, 27, 27),
       elevation: 5,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: Stack(
@@ -388,12 +380,14 @@ void _playVideo(BuildContext context, String videoId, String videoUrl) async {
   // Check if a previous video is still playing and dispose of it
   _videoPlayerController?.dispose();
   _chewieController?.dispose();
+  _revokeActiveObjectUrl();
 
   // Use asset video URL for Android or network URL for web
  String localVideoUrl = await loadVideo(videoId, videoUrl);
 
   // Create a new VideoPlayerController
-  _videoPlayerController = VideoPlayerController.network(localVideoUrl);
+  _videoPlayerController =
+      VideoPlayerController.networkUrl(Uri.parse(localVideoUrl));
 
   // Show the video player dialog immediately
   showDialog(
@@ -440,10 +434,7 @@ void _playVideo(BuildContext context, String videoId, String videoUrl) async {
 }
 
   Future<String> loadVideo(String videoId, String videoUrl) async {
-    if (!kIsWeb && io.Platform.isAndroid) {
-      // For Android, always use the asset video URL
-      return videoUrl;
-    } else if (kIsWeb) {
+    if (kIsWeb) {
       // For web, check if the video is downloaded in IndexedDB
       final dbFactory = getIdbFactory();
       final db = await dbFactory!.open('p3VideosDBv1', version: 1, onUpgradeNeeded: (VersionChangeEvent event) {
@@ -459,37 +450,41 @@ void _playVideo(BuildContext context, String videoId, String videoUrl) async {
       if (rawResult != null) {
         final result = rawResult as Map<String, dynamic>;
         final Uint8List data = result['data'] as Uint8List;
-         if (data != null) {
-    // Convert Uint8List to JSUint8Array
-    final jsUint8Array = data.toJS;
+  // Convert Uint8List to JSUint8Array
+  final jsUint8Array = data.toJS;
 
-    // Create a JSArray<JSUint8Array> containing the jsUint8Array
-    final jsArray = [jsUint8Array].toJS;
+  // Create a JSArray<JSUint8Array> containing the jsUint8Array
+  final jsArray = [jsUint8Array].toJS;
 
-    // Create a BlobPropertyBag with the desired MIME type
-    final blobPropertyBag = html.BlobPropertyBag(type: 'video/mp4');
+  // Create a BlobPropertyBag with the desired MIME type
+  final blobPropertyBag = html.BlobPropertyBag(type: 'video/mp4');
 
-    // Create the Blob using the JSArray and BlobPropertyBag
-    final blob = html.Blob(jsArray, blobPropertyBag);
+  // Create the Blob using the JSArray and BlobPropertyBag
+  final blob = html.Blob(jsArray, blobPropertyBag);
 
-    // Generate a URL for the Blob
-    final url = html.URL.createObjectURL(blob);
+  // Generate a URL for the Blob
+  final url = html.URL.createObjectURL(blob);
 
-    return url;
-  }
+  _activeObjectUrl = url;
+  return url;
       }
     }
-    if (kIsWeb && !kDebugMode) {
-    // Modify the path by removing one "/assets/" occurrence
-    videoUrl = '/assets/$videoUrl';
+    return _webAssetUrl(videoUrl); // Fallback to the bundled asset if not downloaded.
   }
-    return videoUrl; // Fallback to the original network URL if not downloaded
+
+  void _revokeActiveObjectUrl() {
+    final objectUrl = _activeObjectUrl;
+    if (objectUrl == null) return;
+    html.URL.revokeObjectURL(objectUrl);
+    _activeObjectUrl = null;
   }
+
   @override
   void dispose() {
     // Ensure that the controllers are not null before disposing
     _videoPlayerController?.dispose();
     _chewieController?.dispose();
+    _revokeActiveObjectUrl();
     super.dispose();
   }
 }

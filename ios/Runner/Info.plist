@@ -4,16 +4,16 @@
 	<dict>
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
-		<key>CFBundleDisplayName</key>
-		<string>Closed Loop</string>
+	<key>CFBundleDisplayName</key>
+	<string>REVIVE</string>
 		<key>CFBundleExecutable</key>
 		<string>$(EXECUTABLE_NAME)</string>
 		<key>CFBundleIdentifier</key>
 		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 		<key>CFBundleInfoDictionaryVersion</key>
 		<string>6.0</string>
-		<key>CFBundleName</key>
-		<string>closed_loop</string>
+	<key>CFBundleName</key>
+	<string>REVIVE</string>
 		<key>CFBundlePackageType</key>
 		<string>APPL</string>
 		<key>CFBundleShortVersionString</key>

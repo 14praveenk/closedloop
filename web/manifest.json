@@ -1,53 +1,39 @@
 {
     "name": "REVIVE",
     "short_name": "REVIVE",
-    "start_url": ".",
+    "description": "Learn life-saving skills today.",
+    "id": "/",
+    "start_url": "/",
+    "scope": "/",
+    "lang": "en",
+    "dir": "ltr",
+    "categories": [
+        "education",
+        "health",
+        "medical"
+    ],
     "display": "standalone",
+    "display_override": [
+        "window-controls-overlay",
+        "standalone",
+        "browser"
+    ],
     "background_color": "#252525",
     "theme_color": "#252525",
-    "description": "Learn life-saving skills today.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
-    "screenshots": [
-        {
-            "src": "icons/screenshot1.png",
-            "sizes": "1170x2532",
-            "type": "image/png",
-            "label": "Guide",
-            "form_factor": "narrow"
-        },
-        {
-            "src": "icons/screenshot2.png",
-            "sizes": "1170x2532",
-            "type": "image/png",
-            "label": "Videos",
-            "form_factor": "narrow"
-        },
-        {
-            "src": "icons/screenshot3.png",
-            "sizes": "1920x1279",
-            "type": "image/png",
-            "label": "Guide",
-            "form_factor": "wide"
-        },
-        {
-            "src": "icons/screenshot4.png",
-            "sizes": "1920x1279",
-            "type": "image/png",
-            "label": "Videos",
-            "form_factor": "wide"
-        }
-    ],
     "icons": [
         {
             "src": "icons/Icon-192.png",
             "sizes": "192x192",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any"
         },
         {
             "src": "icons/Icon-512.png",
             "sizes": "512x512",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any"
         },
         {
             "src": "icons/Icon-maskable-192.png",
@@ -60,6 +46,36 @@
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "maskable"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "icons/screenshot1.png",
+            "sizes": "1170x2532",
+            "type": "image/png",
+            "label": "Step-by-step learning guide",
+            "form_factor": "narrow"
+        },
+        {
+            "src": "icons/screenshot2.png",
+            "sizes": "1170x2532",
+            "type": "image/png",
+            "label": "Life-saving skills videos",
+            "form_factor": "narrow"
+        },
+        {
+            "src": "icons/screenshot3.png",
+            "sizes": "1920x1279",
+            "type": "image/png",
+            "label": "Step-by-step learning guide on desktop",
+            "form_factor": "wide"
+        },
+        {
+            "src": "icons/screenshot4.png",
+            "sizes": "1920x1279",
+            "type": "image/png",
+            "label": "Life-saving skills videos on desktop",
+            "form_factor": "wide"
         }
     ]
 }
